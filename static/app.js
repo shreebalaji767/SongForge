@@ -119,7 +119,7 @@ function generate(){
     lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
     if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
    }else if(angle==='Anime / fandom obsession'&&engine.multilingualFandom[lang.id]){
-    lines=[pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id),pickFresh(multilingualFandom[lang.id],'localized'+lang.id)];
+    lines=[pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id),pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id)];
    }else{
     lines=[pickFresh(bank,'parody'+lang.id),pickFresh(bank,'parody'+lang.id)];
    }
