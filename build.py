@@ -79,9 +79,9 @@ for key in ("phrases", "parodyLines", "multilingualFandom", "arcs", "rhymeScheme
 if engine.get("version", 0) < 8:
     raise SystemExit("Generated lyric engine is outdated; expected version 8 or newer.")
 if not engine.get("localizedPhrases", {}).get("zh") or not engine.get("localizedParody", {}).get("zh") or not engine.get("localizedRap", {}).get("zh"):
+    raise SystemExit("Generated lyric engine is missing native Mandarin songwriting banks.")
 if not engine.get("localizedSongForms", {}).get("zh", {}).get("Romance satire"):
     raise SystemExit("Mandarin structured song form is missing from generated data.")
-    raise SystemExit("Generated lyric engine is missing native Mandarin songwriting banks.")
 if len(engine["localizedPhrases"]["zh"]) < 15 or len(engine["localizedRap"]["zh"]) < 16:
     raise SystemExit("Mandarin mood or rap bank is incomplete.")
 for angle, lines in engine["localizedParody"]["zh"].items():
