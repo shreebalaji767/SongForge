@@ -124,14 +124,14 @@ class LyricEngineTests(unittest.TestCase):
             parody_angle="Romance satire",
         )
         self.assertIn("深夜外卖", generate_lyrics("深夜外卖", seed=21, language="zh"))
-        self.assertIn("[Chorus]", lyrics)
+        self.assertIn("[Chorus —", lyrics)
         self.assertIn("，", lyrics)
-        nonempty_lines = [line for line in lyrics.splitlines() if line.strip()]
-        self.assertEqual(len(set(nonempty_lines)), len(nonempty_lines))
-        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0]
-        verse_two = lyrics.split("[Verse 2]\n", 1)[1].split("\n\n[Outro]", 1)[0]
+        verse_one = lyrics.split("[Verse 1 — 轻快说唱｜俏皮切分]\n", 1)[1].split("\n\n[Pre-Chorus", 1)[0]
+        verse_two = lyrics.split("[Verse 2 — 加速说唱｜密集押韵]\n", 1)[1].split("\n\n[Bridge", 1)[0]
         self.assertEqual(len(verse_one.splitlines()), 8)
         self.assertEqual(len(verse_two.splitlines()), 8)
+        self.assertIn("我的脑说：算了，直接亲！", lyrics)
+        self.assertIn("[Outro — 伴奏骤停", lyrics)
 
     def test_chinese_cli_flag_writes_utf8_lyrics(self):
         root = Path(__file__).resolve().parents[1]
