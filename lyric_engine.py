@@ -694,10 +694,10 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
             verse2 = [line + " — I write my truth across the beat" for line in verse2]
 
     return (
-        "[Verse 1]\\n" + "\n".join(verse1[:verse_lines])
-        + "\\n\\n[Chorus]\\n" + "\n".join(chorus_lines)
-        + "\\n\\n[Verse 2]\\n" + "\n".join(verse2[:verse_lines])
-        + "\\n\\n[Outro]\\n" + "\n".join(outro_lines)
+        "[Verse 1]\n" + "\n".join(verse1[:verse_lines])
+        + "\n\n[Chorus]\n" + "\n".join(chorus_lines)
+        + "\n\n[Verse 2]\n" + "\n".join(verse2[:verse_lines])
+        + "\n\n[Outro]\n" + "\n".join(outro_lines)
     )
 
 if __name__ == "__main__":
