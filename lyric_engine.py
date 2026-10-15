@@ -54,13 +54,28 @@ ARCS = {
  "bridge":["For one brief moment, even the stars go quiet","The truth arrives disguised as one more joke","I change the ending when the door is closed"],
  "resolve":["Now every scattered piece is finding place","The next new chapter waits beyond the light","We turn the last page but keep the world alive"]
 }
-ENGINE = {"version":1,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"arcs":ARCS}
+RHYME_SCHEMES = {
+ "Free verse": [],
+ "AABB": [
+  "I turn {topic} into a spark tonight",
+  "We chase that spark until it shines bright",
+  "Each little step becomes a brand-new start",
+  "We sing the next line straight from the heart"
+ ],
+ "ABAB": [
+  "I carry {topic} into the night",
+  "I find the nerve to begin again",
+  "We turn the shadows into light",
+  "And let the morning wash away the rain"
+ ]
+}
+ENGINE = {"version":2,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES}
 
 def build_static_data(destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(ENGINE, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None) -> str:
+def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None, rhyme_scheme: str="Free verse") -> str:
     """Generate a complete short lyric draft locally using Python templates."""
     rng = random.Random(seed)
     topic = re.sub(r"\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
@@ -90,7 +105,7 @@ if __name__ == "__main__":
     if args.build_data:
         build_static_data(Path(args.output or "content/lyric_engine.json"))
     else:
-        lyric = generate_lyrics(args.topic, args.mood, args.genre, args.parody, args.seed)
+        lyric = generate_lyrics(args.topic, args.mood, args.genre, args.parody, args.seed, args.rhyme_scheme)
         if args.output:
             Path(args.output).write_text(lyric + "\n", encoding="utf-8")
         else:
