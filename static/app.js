@@ -148,8 +148,10 @@ function generate(){
    if(genre==='Metal'||genre==='Rock')lines=lines.map(line=>line.replace(/light|morning|quiet/gi,'fire'));
   }else if(lang.id==='zh'&&localizedPhrases.zh){
    const zhBank=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful||bank;
-   if(['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh){lines=[pickFresh(localizedRap.zh,'localizedRapzh'),pickFresh(zhBank,'localizedPhraseszh'+mood)];}
-   else{const zhTopic=/[\\u4e00-\\u9fff]/.test(topic)?topic:'今晚的心事';const topicLines=['今晚这首歌，就唱给'+zhTopic+'听','把'+zhTopic+'写进今晚的副歌','关于'+zhTopic+'，我还有话没说完'];lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(zhBank,'localizedPhraseszh'+mood)];}
+   const zhTopic=/[\\u4e00-\\u9fff]/.test(topic)?topic:'今晚的心事';
+   const topicLines=['今晚这首歌，就唱给'+zhTopic+'听','把'+zhTopic+'写进今晚的副歌','关于'+zhTopic+'，我还有话没说完'];
+   if(['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh){lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(localizedRap.zh,'localizedRapzh')];}
+   else{lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(zhBank,'localizedPhraseszh'+mood)];}
   }else lines=[pickFresh(bank,'lang'+lang.id),pickFresh(bank,'lang'+lang.id)];
   if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'joke'));else if(parody&&lang.id==='zh'&&localizedParody.zh&&localizedParody.zh[angle])lines.push(pickFresh(localizedParody.zh[angle],'localizedParodyzh'));else if(lang.id==='zh'&&localizedPhrases.zh){const zhExtra=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful;const zhRap=['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh;lines.push(pickFresh(zhRap?localizedRap.zh:zhExtra,zhRap?'localizedRapzh':'localizedPhraseszh'+mood));}else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
   out.push(...lines,'');
