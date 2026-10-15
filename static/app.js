@@ -8,7 +8,9 @@ const structures={
  short:['[Verse]','[Chorus]','[Outro]']
 };
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function getLib(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
+function isSectionHeader(line){return /^\s*\[[^\]]+\](?:\s+[—–-]\s+.+)?\s*$/.test(String(line??''))}
+function normalizeSong(s,fallbackId){if(!s||typeof s!=='object'||Array.isArray(s)||typeof s.title!=='string'||typeof s.lyrics!=='string')return null;const strings=v=>Array.isArray(v)?v.filter(x=>typeof x==='string').slice(0,100):[];return{...s,id:typeof s.id==='string'&&s.id.trim()?s.id.slice(0,160):fallbackId,title:s.title.slice(0,200),lyrics:s.lyrics.slice(0,200000),topic:typeof s.topic==='string'?s.topic.slice(0,2000):'',genre:typeof s.genre==='string'?s.genre.slice(0,80):'',mood:typeof s.mood==='string'?s.mood.slice(0,80):'',languages:strings(s.languages),languageIds:strings(s.languageIds),favorite:!!s.favorite,createdAt:typeof s.createdAt==='string'?s.createdAt:new Date().toISOString(),updatedAt:typeof s.updatedAt==='string'?s.updatedAt:undefined}}
+function getLib(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v.map((s,i)=>normalizeSong(s,'legacy-'+i)).filter(Boolean):[]}catch(e){return[]}}
 function notify(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400)}
 function setSelect(id,arr){$(id).innerHTML=arr.map(x=>'<option value="'+safe(typeof x==='string'?x:x.id)+'">'+safe(typeof x==='string'?x:x.name)+'</option>').join('')}
 function selected(){if(document.querySelector('input[name=mode]:checked').value==='single')return[data.languages.find(x=>x.id===$('language').value)||data.languages[0]];return Array.from($('mixed').querySelectorAll('input:checked')).map(i=>data.languages.find(x=>x.id===i.value)).filter(Boolean)}
@@ -45,18 +47,19 @@ function bind(){
  $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueLyricHistory($('lyrics').value);queueDraft()}});
  $('title').addEventListener('input',()=>{if(current){current.title=$('title').value;$('heading').textContent=$('title').value||'Untitled Song';queueDraft()}});
  $('undoLyrics').onclick=()=>moveLyricHistory(-1);$('redoLyrics').onclick=()=>moveLyricHistory(1);
+ $('findRhymes').onclick=findRhymes;$('rhymeWord').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();findRhymes()}});setupInstallPrompt();
  $('copy').onclick=()=>copy($('lyrics').value);
  $('copyHook').onclick=()=>{
   const lines=$('lyrics').value.split(/\r?\n/);let active=false,found=false,out=[];
   for(const line of lines){
-   if(/^\s*\[.*\]\s*$/.test(line)){active=/chorus|hook/i.test(line);if(active){found=true;out.push(line)}else if(found)break;continue}
+   if(isSectionHeader(line)){const header=(line.match(/^\s*\[([^\]]+)\]/)||[])[1]||'';active=/chorus|hook/i.test(header);if(active){found=true;out.push(line)}else if(found)break;continue}
    if(active)out.push(line);
   }
   const hook=out.join('\n').trim();if(hook)copy(hook);else notify('No [Chorus] or [Hook] section found.');
  };
  $('cleanLyrics').onclick=()=>{
-  const cleaned=$('lyrics').value.split(/\r?\n/).map(line=>line.trimEnd()).join('\n').replace(/^[ \t]+|[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').replace(/\n*\s*(\[[^\]]+\])\s*\n*/g,'\n\n$1\n').replace(/^\n+|\n+$/g,'');
-  $('lyrics').value=cleaned;if(current)current.lyrics=cleaned;
+  const before=$('lyrics').value;const cleaned=before.split(/\r?\n/).map(line=>line.trimEnd()).join('\n').replace(/^[ \t]+|[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').replace(/^\n+|\n+$/g,'');
+  clearTimeout(historyTimer);commitLyricHistory(before);$('lyrics').value=cleaned;commitLyricHistory(cleaned);if(current)current.lyrics=cleaned;
   $('words').textContent=countWords(cleaned)+' words · Formatting cleaned';updateCoach();queueDraft();notify('Whitespace cleaned; lyric wording preserved.');
  };
  $('download').onclick=()=>download(songText(),slug($('title').value||'song')+'.txt','text/plain;charset=utf-8');
@@ -149,8 +152,8 @@ function ensureCoach(){
 }
 function updateCoach(){
  if(!$('lyrics'))return;
- const raw=$('lyrics').value||'',lines=raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),headers=lines.filter(x=>/^\[.*\]$/.test(x));
- let activeSection='';const entries=lines.map(line=>{if(/^\[.*\]$/.test(line))activeSection=line;return{line,section:activeSection}}).filter(x=>!/^\[.*\]$/.test(x.line));
+ const raw=$('lyrics').value||'',lines=raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),headers=lines.filter(isSectionHeader);
+ let activeSection='';const entries=lines.map(line=>{if(isSectionHeader(line))activeSection=(line.match(/^\s*(\[[^\]]+\])/)||[])[1]||line;return{line,section:activeSection}}).filter(x=>!isSectionHeader(x.line));
  const body=entries.map(x=>x.line),norm=entries.filter(x=>!/chorus|hook/i.test(x.section)).map(x=>x.line.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()).filter(Boolean);
  const seen=new Set(),dupes=[];norm.forEach(line=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
  const hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
@@ -240,7 +243,7 @@ function libraryAction(action,id){
 function slug(s){return(s||'song').toLowerCase().normalize('NFKD').replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-|-$/g,'').slice(0,80)||'song'}
 function download(text,name,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function copy(text){try{await navigator.clipboard.writeText(text);notify('Lyrics copied')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.append(ta);ta.select();const ok=document.execCommand('copy');ta.remove();notify(ok?'Lyrics copied':'Copy failed — select and copy the lyrics manually')}}
-function restore(e){const f=e.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result),arr=Array.isArray(parsed)?parsed:parsed.songs;if(!Array.isArray(arr))throw Error('shape');const map=new Map(getLib().map(s=>[s.id,s]));arr.forEach((s,i)=>{if(s&&typeof s.title==='string'&&typeof s.lyrics==='string')map.set(s.id||('restored-'+Date.now()+'-'+i),s)});localStorage.setItem(KEY,JSON.stringify(Array.from(map.values())));updateCount();renderLibrary();notify('Backup restored')}catch(e){notify('Invalid SongForge backup file')}e.target.value=''};reader.readAsText(f)}
+function restore(e){const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){notify('Backup is too large (maximum 5 MB).');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result),arr=Array.isArray(parsed)?parsed:parsed.songs;if(!Array.isArray(arr))throw Error('shape');const incoming=arr.map((s,i)=>normalizeSong(s,'restored-'+Date.now()+'-'+i)).filter(Boolean);if(!incoming.length)throw Error('empty');const map=new Map(getLib().map(s=>[s.id,s]));incoming.forEach(s=>map.set(s.id,s));localStorage.setItem(KEY,JSON.stringify(Array.from(map.values())));updateCount();renderLibrary();notify('Backup restored: '+incoming.length+' song'+(incoming.length===1?'':'s'))}catch(e){notify('Invalid backup or browser storage is full. No songs were imported.')}finally{e.target.value=''}};reader.onerror=()=>{notify('Could not read the selected backup file.');e.target.value=''};reader.readAsText(f)}
 init();
 if('serviceWorker' in navigator && location.protocol!=='file:'){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
