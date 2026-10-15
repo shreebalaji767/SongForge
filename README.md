@@ -2,6 +2,10 @@
 
 A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
+## Installable PWA, responsive UI, and branding
+
+SongForge includes an install control for supported browsers, a web app manifest, an offline service worker, a custom SVG logo and favicon, and responsive layouts for phones, tablets, and desktop screens. On iPhone/iPad, use Share → Add to Home Screen; browsers that do not expose an install prompt can show their own browser-menu installation option. PWA installation requires HTTPS (or localhost for development) and browser support.
+
 ## Python lyric engine (no AI)
 
 Python owns the deterministic lyric templates and can generate a complete draft locally. The build step writes those templates to `content/lyric_engine.json`; the static browser app uses that JSON to compose interactive lyrics without running a Python server.
