@@ -54,17 +54,54 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
-            self.assertGreaterEqual(data["version"], 5)
+            self.assertGreaterEqual(data["version"], 6)
             for angle, lines in data["parodyLines"].items():
                 self.assertGreaterEqual(len(lines), 32, angle)
                 self.assertEqual(len(lines), len(set(lines)), angle)
             self.assertIn("multilingualFandom", data)
+            self.assertEqual(len(data["localizedPhrases"]["zh"]), 15)
+            self.assertGreaterEqual(len(data["localizedRap"]["zh"]), 16)
+            for angle, lines in data["localizedParody"]["zh"].items():
+                self.assertGreaterEqual(len(lines), 20, angle)
+                self.assertEqual(len(lines), len(set(lines)), angle)
             self.assertIn("rhymeSchemes", data)
             self.assertIn("AABB", data["rhymeSchemes"])
             self.assertIn("ABAB", data["rhymeSchemes"])
             self.assertIn("rhymeDictionary", data)
             self.assertGreaterEqual(len(data["rhymeDictionary"]), 20)
 
+
+
+    def test_chinese_generation_uses_native_mandarin_banks(self):
+        lyrics = generate_lyrics(
+            "深夜外卖", mood="Playful", genre="Rap", parody=True,
+            seed=21, verse_lines=8, language="zh",
+            parody_angle="Romance satire",
+        )
+        self.assertIn("深夜外卖", generate_lyrics("深夜外卖", seed=21, language="zh"))
+        self.assertIn("[Chorus]", lyrics)
+        self.assertIn("你说", lyrics)
+        self.assertEqual(len(set(lyrics.splitlines())), len(lyrics.splitlines()))
+        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\\n\\n[Outro]", 1)[0]
+        self.assertEqual(len(verse_one.splitlines()), 8)
+        self.assertEqual(len(verse_two.splitlines()), 8)
+
+    def test_chinese_cli_flag_writes_utf8_lyrics(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "chinese" / "song.txt"
+            subprocess.run(
+                [
+                    sys.executable, str(root / "lyric_engine.py"),
+                    "--topic", "夏夜", "--language", "zh", "--genre", "Rap",
+                    "--seed", "8", "--output", str(target),
+                ],
+                cwd=root, check=True, capture_output=True, text=True,
+            )
+            lyric = target.read_text(encoding="utf-8")
+            self.assertIn("夏夜", lyric)
+            self.assertIn("副歌", lyric)
 
     def test_unknown_options_fall_back_and_line_count_is_clamped(self):
         lyrics = generate_lyrics(
