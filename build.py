@@ -12,6 +12,8 @@ REQUIRED = [
     ROOT / "static" / "app.js",
     ROOT / "static" / "style.css",
     ROOT / "content" / "catalog.json",
+    ROOT / "manifest.webmanifest",
+    ROOT / "sw.js",
 ]
 for path in REQUIRED:
     if not path.is_file():
@@ -29,6 +31,8 @@ if DIST.exists():
     shutil.rmtree(DIST)
 DIST.mkdir(parents=True)
 shutil.copy2(ROOT / "index.html", DIST / "index.html")
+shutil.copy2(ROOT / "manifest.webmanifest", DIST / "manifest.webmanifest")
+shutil.copy2(ROOT / "sw.js", DIST / "sw.js")
 shutil.copytree(ROOT / "static", DIST / "static")
 shutil.copytree(ROOT / "content", DIST / "content")
 print(f"Validated catalog ({len(catalog['languages'])} languages), generated Python lyric bank, and built static site: {DIST}")
