@@ -20,20 +20,23 @@ Requires Python 3.10+; no third-party packages are required.
 python build.py
 ```
 
-The generated site is written to `dist/`. Open `dist/index.html` locally or deploy the contents of `dist/` to a static host. For GitHub Pages, enable Pages in **Repository Settings → Pages** and set the build/deployment source to **GitHub Actions**. The included workflow then builds and deploys the `dist/` folder on pushes to `main`.
+The generated site is written to `dist/`. Deploy the contents of `dist/` to a static host. Browsers generally block local JSON fetches from `file://`, so preview through a static host rather than opening the HTML file directly. For GitHub Pages, enable Pages in **Repository Settings → Pages** and set the build/deployment source to **GitHub Actions**. The included workflow then builds and deploys the `dist/` folder on pushes to `main`.
 
 ## Generator expectations
 
-The offline composer uses original templates and language resources, so it is a template-driven writing aid rather than a large language model. Language coverage and native-level fluency depend on the resources available. Users should review multilingual lyrics for naturalness.
+The offline composer uses original templates and language resources, so it is a template-driven writing aid rather than a large language model. It never generates audio, music, vocals, or beats. English output varies with topic, mood, genre, and parody angle; other languages use curated phrase banks and may need more editing for naturalness. Language coverage and native-level fluency depend on the resources available. Users should review multilingual lyrics for naturalness.
 
 ## Features
 
 - Genre, mood, theme, language, and song structure selection
 - Single-language and mixed-language lyrics
 - Optional original parody/comedy mode
-- Editable lyrics and section-level regeneration
+- Editable lyrics with topic-, mood-, and genre-aware templates
+- Automatic draft recovery in the same browser
+- Keyboard shortcuts: `Ctrl/Cmd + S` to save and `Ctrl/Cmd + Enter` to generate
 - Local library, favorites, search, autosave, and JSON backup/restore
 - TXT and Markdown export
+- Favorites-only library filter and one-click song duplication
 - Responsive interface with Unicode support
 
 ## Privacy
