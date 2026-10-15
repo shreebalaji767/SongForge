@@ -78,11 +78,15 @@ function generate(){
  const topic=$('topic').value.trim()||'following a dream through the night',genre=$('genre').value,mood=$('mood').value,langs=selected().filter(Boolean);
  if(!langs.length){notify('Select at least one language.');return}
  const parody=$('parody').checked,angle=$('parodystyle').value,seed=hash(topic+'|'+genre+'|'+mood+'|'+Date.now()+'|'+Math.random()),sections=(structures[$('structure').value]||structures.standard).slice();
- if($('length').value==='short')sections.splice(3);
- if($('length').value==='long')sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
+ if($('length').value==='short'){
+  const first=sections.find(x=>/intro|verse/i.test(x))||'[Verse]';
+  const hook=sections.find(x=>/chorus|hook/i.test(x))||'[Chorus]';
+  sections.splice(0,sections.length,first,hook,'[Outro]');
+ }
+ if($('length').value==='long'&&!sections.some(x=>/verse 3/i.test(x)))sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
  const topicPhrase=topic.replace(/[.!?]+$/,'').replace(/\s+/g,' ').toLowerCase();
  const hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=parodyLines[angle]||parodyLines['Anime / fandom obsession'];
- const hookLines=parody&&hookLang.id==='en'?jokes.slice():[
+ const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&multilingualFandom[hookLang.id]?multilingualFandom[hookLang.id].slice():[
   (hookLang.lines||data.languages[0].lines)[0],
   (hookLang.lines||data.languages[0].lines)[1],
   (hookLang.lines||data.languages[0].lines)[2],
