@@ -1,6 +1,6 @@
 # SongForge — Multilingual Lyrics Lab
 
-**Current release: v5.0** — larger unique parody phrase banks, stronger build-time validation, and an updated offline cache so installed copies pick up the release.
+**Current release: v6.0** — native Simplified Chinese songwriting and comedy banks, Chinese rap phrasing, expanded offline validation, and an updated app cache.
 
 A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
@@ -17,6 +17,8 @@ Generate lyrics locally from a terminal:
 ```bash
 python lyric_engine.py --topic "neon city dreams" --mood Hopeful --genre Pop --rhyme-scheme AABB --verse-lines 6
 python lyric_engine.py --topic "anime marathon" --parody --seed 7 --output song.txt
+python lyric_engine.py --topic "深夜外卖" --language zh --genre Rap --seed 7 --output chinese-song.txt
+python lyric_engine.py --topic "恋爱脑" --language zh --parody --parody-angle "Romance satire" --verse-lines 8
 python lyric_engine.py --build-data --output content/lyric_engine.json
 python -m unittest discover -s tests -v
 python build.py
@@ -57,13 +59,14 @@ The generated site is written to `dist/`. Deploy the contents of `dist/` to a st
 
 ## Generator expectations
 
-The offline composer uses original templates and language resources, so it is a template-driven writing aid rather than a large language model. It never generates audio, music, vocals, or beats. English output varies with topic, mood, genre, and parody angle; other languages use curated phrase banks and may need more editing for naturalness. Language coverage and native-level fluency depend on the resources available. Users should review multilingual lyrics for naturalness.
+The offline composer uses original templates and language resources, so it is a template-driven writing aid rather than a large language model. It never generates audio, music, vocals, or beats. English output varies with topic, mood, genre, and parody angle. Simplified Chinese (中文) now has mood-specific lyric banks, Chinese rap lines, and culturally grounded parody banks for fandom, daily-life chaos, internet memes, romance satire, and genre exaggeration. The Chinese resources are written as Mandarin lines rather than word-for-word translations. Other languages use curated phrase banks and may need more editing for naturalness; users should review multilingual lyrics before publishing.
 
 ## Features
 
 - Genre, mood, theme, language, and song structure selection
 - Single-language and mixed-language lyrics
-- Optional original parody/comedy mode
+- Optional original parody/comedy mode, including native Mandarin comedy categories
+- Simplified Chinese songwriting with mood-aware phrases, Chinese rap resources, and localized humor
 - Editable lyrics with topic-, mood-, and genre-aware templates
 - Live Lyric Coach checks section structure, line count, repeated lines, rough singability, possible English end-rhyme groups, and estimated syllable spread
 - Coach feedback updates while editing and ignores intentional repeats inside chorus/hook sections
