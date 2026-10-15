@@ -76,8 +76,15 @@ for key in ("phrases", "parodyLines", "multilingualFandom", "arcs", "rhymeScheme
     if not isinstance(engine.get(key), dict) or not engine[key]:
         raise SystemExit(f"Generated lyric engine is missing valid data: {key}")
 
-if engine.get("version", 0) < 5:
-    raise SystemExit("Generated lyric engine is outdated; expected version 5 or newer.")
+if engine.get("version", 0) < 6:
+    raise SystemExit("Generated lyric engine is outdated; expected version 6 or newer.")
+if not engine.get("localizedPhrases", {}).get("zh") or not engine.get("localizedParody", {}).get("zh") or not engine.get("localizedRap", {}).get("zh"):
+    raise SystemExit("Generated lyric engine is missing native Mandarin songwriting banks.")
+if len(engine["localizedPhrases"]["zh"]) < 15 or len(engine["localizedRap"]["zh"]) < 16:
+    raise SystemExit("Mandarin mood or rap bank is incomplete.")
+for angle, lines in engine["localizedParody"]["zh"].items():
+    if len(lines) < 20 or len(set(lines)) != len(lines):
+        raise SystemExit(f"Mandarin parody bank must contain at least 20 unique lines: {angle}")
 for angle, lines in engine["parodyLines"].items():
     if len(lines) < 32 or len(set(lines)) != len(lines):
         raise SystemExit(f"Parody bank must contain at least 32 unique lines: {angle}")
