@@ -76,6 +76,12 @@ for key in ("phrases", "parodyLines", "multilingualFandom", "arcs", "rhymeScheme
     if not isinstance(engine.get(key), dict) or not engine[key]:
         raise SystemExit(f"Generated lyric engine is missing valid data: {key}")
 
+if engine.get("version", 0) < 5:
+    raise SystemExit("Generated lyric engine is outdated; expected version 5 or newer.")
+for angle, lines in engine["parodyLines"].items():
+    if len(lines) < 32 or len(set(lines)) != len(lines):
+        raise SystemExit(f"Parody bank must contain at least 32 unique lines: {angle}")
+
 # Confirm the service worker only pre-caches assets that will be deployed.
 service_worker = (ROOT / "sw.js").read_text(encoding="utf-8")
 match = re.search(r"const SHELL=\[(.*?)\];", service_worker, re.S)
