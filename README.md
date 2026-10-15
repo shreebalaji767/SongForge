@@ -2,12 +2,21 @@
 
 A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
+## Free and offline-friendly
+
+- No AI model, paid API, API key, subscription, or server required
+- Installable as a Progressive Web App (PWA) on supported browsers
+- The app shell is cached so it can reopen offline after the first successful visit
+- Saved lyrics and drafts remain in this browser's local storage; use Backup to move them to another device
+- Google Fonts are optional styling only; system font fallbacks are used if offline
+
 ## Principles
 
 - Static HTML, CSS, JavaScript, and JSON output
 - Python is used only at build time
 - No database, backend, or Python server
 - Browser `localStorage` for drafts, favorites, preferences, and library
+- Service worker caches the static app shell for offline reopening
 - Export/import library backups as JSON
 - No mandatory AI API or API keys
 - Lyrics only: no audio, music, vocals, or beat generation
