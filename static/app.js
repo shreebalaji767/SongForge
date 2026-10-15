@@ -62,12 +62,15 @@ function generate(){
  if($('length').value==='long'&&!sections.some(x=>/verse 3/i.test(x)))sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
  const topicPhrase=topic.replace(/[.!?]+$/,'').replace(/\s+/g,' ').toLowerCase();
  const engine=data.lyricEngine,hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=engine.parodyLines[angle]||engine.parodyLines['Anime / fandom obsession'];
- const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?engine.multilingualFandom[hookLang.id].slice():[
+ let hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?engine.multilingualFandom[hookLang.id].slice():[
   (hookLang.lines||data.languages[0].lines)[0],
   (hookLang.lines||data.languages[0].lines)[1],
   (hookLang.lines||data.languages[0].lines)[2],
   (hookLang.lines||data.languages[0].lines)[3]
  ];
+ if(!parody&&hookLang.id==='en'&&engine.rhymeSchemes&&engine.rhymeSchemes[$('rhymeScheme').value]&&engine.rhymeSchemes[$('rhymeScheme').value].length){
+  hookLines=engine.rhymeSchemes[$('rhymeScheme').value].map(line=>line.replace('{topic}',topicPhrase));
+ }
  const arcs=engine.arcs;
  const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
  function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));const pool=fresh.length?fresh:bank.map((v,i)=>({v,i}));const x=pool[Math.abs(seed+used.size*13)%pool.length];used.add(key+x.i);return x.v}
@@ -95,8 +98,8 @@ function generate(){
   out.push(...lines,'');
  });
  const lyrics=out.join('\n').trim();
- current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
- showEditor();queueDraft();notify('Lyrics generated with a consistent repeating hook and connected verse progression.');
+ current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,rhymeScheme:$('rhymeScheme').value,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
+ showEditor();queueDraft();notify('Lyrics generated locally with your selected rhyme pattern.');
 }
 function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save';updateCoach()}
 function ensureCoach(){
