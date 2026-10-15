@@ -55,7 +55,7 @@ for reference in parser.assets:
     if not target.is_relative_to(ROOT) or not target.exists():
         raise SystemExit(f"Broken local HTML asset reference: {reference}")
 js = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
-missing_ids = sorted(set(re.findall(r"\$\(['"]([^'"]+)['"]\)", js)) - parser.ids - {"lyricCoach"})
+missing_ids = sorted(set(re.findall(r"\$\(['\"]([^'\"]+)['\"]\)", js)) - parser.ids - {"lyricCoach"})
 if missing_ids:
     raise SystemExit("JavaScript references missing HTML IDs: " + ", ".join(missing_ids))
 
