@@ -437,36 +437,35 @@ def build_static_data(destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(ENGINE, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None, rhyme_scheme: str="Free verse") -> str:
+def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None, rhyme_scheme: str="Free verse", verse_lines: int=4) -> str:
     """Generate a complete short lyric draft locally using Python templates."""
     rng = random.Random(seed)
-    topic = re.sub(r"\\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
+    topic = re.sub(r"\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
+    verse_lines = max(2, min(8, int(verse_lines)))
     mood_lines = PHRASES.get(mood, PHRASES["Hopeful"])
     if parody:
-        lines = rng.sample(PARODY["Anime / fandom obsession"], k=4) + [
-            "The next episode can wait (it cannot)",
-            "My calendar is now a filler arc",
-            "One more page becomes a whole new season",
-            "My alarm clock deserves a redemption arc",
-        ]
-        chorus_lines = lines[2:4]
+        bank = list(PARODY["Anime / fandom obsession"])
+        verse1 = rng.sample(bank, k=2)
+        verse2 = ["The next episode can wait (it cannot)", "My calendar is now a filler arc"]
+        chorus_lines = [bank[2], bank[3], "One more page becomes a whole new season", "My alarm clock deserves a redemption arc"]
     else:
-        lines = [
-            ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines),
-            rng.choice(ARCS["rise"]), rng.choice(mood_lines),
-            rng.choice(ARCS["bridge"]), rng.choice(mood_lines),
-            rng.choice(ARCS["resolve"]), rng.choice(mood_lines),
-        ]
-        chorus_lines = lines[2:4]
+        verse1 = [ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines)]
+        verse2 = [rng.choice(ARCS["rise"]), rng.choice(mood_lines)]
+        chorus_lines = [rng.choice(mood_lines), rng.choice(ARCS["resolve"])]
         if rhyme_scheme in RHYME_SCHEMES and RHYME_SCHEMES[rhyme_scheme]:
             chorus_lines = [line.format(topic=topic) for line in RHYME_SCHEMES[rhyme_scheme]]
+    while len(verse1) < verse_lines:
+        verse1.append(rng.choice(mood_lines if not parody else PARODY["Anime / fandom obsession"]))
+    while len(verse2) < verse_lines:
+        verse2.append(rng.choice(mood_lines if not parody else PARODY["Anime / fandom obsession"]))
     if genre.lower() in {"rap", "hip-hop", "trap"} and not parody:
-        lines = [line + " — I write my truth across the beat" for line in lines]
+        verse1 = [line + " — I write my truth across the beat" for line in verse1]
+        verse2 = [line + " — I write my truth across the beat" for line in verse2]
     return (
-        "[Verse 1]\\n" + "\\n".join(lines[:2])
-        + "\\n\\n[Chorus]\\n" + "\\n".join(chorus_lines)
-        + "\\n\\n[Verse 2]\\n" + "\\n".join(lines[4:6])
-        + "\\n\\n[Outro]\\n" + "\\n".join(lines[6:8])
+        "[Verse 1]\n" + "\n".join(verse1)
+        + "\n\n[Chorus]\n" + "\n".join(chorus_lines)
+        + "\n\n[Verse 2]\n" + "\n".join(verse2)
+        + "\n\n[Outro]\n" + "\n".join([rng.choice(mood_lines), rng.choice(ARCS["resolve"])])
     )
 
 if __name__ == "__main__":
@@ -476,6 +475,7 @@ if __name__ == "__main__":
     parser.add_argument("--genre", default="Pop")
     parser.add_argument("--parody", action="store_true")
     parser.add_argument("--rhyme-scheme", choices=sorted(RHYME_SCHEMES), default="Free verse", help="Optional offline chorus rhyme pattern")
+    parser.add_argument("--verse-lines", type=int, choices=[2, 4, 6, 8], default=4, help="Lines per verse (2, 4, 6, or 8)")
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--build-data", action="store_true", help="Write the static JSON bank used by the website")
     parser.add_argument("--output", default=None, help="Optional path for generated lyric text")
@@ -483,7 +483,7 @@ if __name__ == "__main__":
     if args.build_data:
         build_static_data(Path(args.output or "content/lyric_engine.json"))
     else:
-        lyric = generate_lyrics(args.topic, args.mood, args.genre, args.parody, args.seed, args.rhyme_scheme)
+        lyric = generate_lyrics(args.topic, args.mood, args.genre, args.parody, args.seed, args.rhyme_scheme, args.verse_lines)
         if args.output:
             Path(args.output).write_text(lyric + "\n", encoding="utf-8")
         else:
