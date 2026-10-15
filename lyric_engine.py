@@ -630,6 +630,7 @@ RHYME_SCHEMES = {
 ZH_PARODY_FORMS = {
  "Romance satire": {
   "Intro": [
+   "你说今晚聊聊{topic}，我先打开备忘录",
    "你已读不回，我把三种结局写进备忘录",
    "恋爱还没开始，我先把风险评估做足",
    "心说冲吧，脑子说先看用户协议",
@@ -804,6 +805,7 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
     if language == "zh":
         if parody and parody_angle in ZH_PARODY_FORMS:
             form = ZH_PARODY_FORMS[parody_angle]
+            form = {section: [line.format(topic=topic) for line in lines] for section, lines in form.items()}
             verse_one = form["Verse 1"][:]
             verse_two = form["Verse 2"][:]
             chorus = form["Chorus"][:]
