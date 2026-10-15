@@ -20,7 +20,9 @@ python -m unittest discover -s tests -v
 python build.py
 ```
 
-The browser studio includes a **Rhyme pattern** selector (Free verse, AABB, and ABAB), a **Lines per verse** setting (2, 4, 6, or 8), and a **Local rhyme finder**. The finder searches the Python-generated offline rhyme dictionary and offers clickable word suggestions without network access. The Python CLI supports the same rhyme patterns and configurable verse lengths.\n\nThis is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
+The browser studio includes a **Rhyme pattern** selector (Free verse, AABB, and ABAB), a **Lines per verse** setting (2, 4, 6, or 8), and a **Local rhyme finder**. The finder searches the Python-generated offline rhyme dictionary and offers clickable word suggestions without network access. The Python CLI supports the same rhyme patterns and configurable verse lengths.
+
+This is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
 
 ## Free and offline-friendly
 
