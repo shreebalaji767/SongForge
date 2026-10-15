@@ -38,7 +38,7 @@ function setupInstallPrompt(){
 }
 function bind(){
  document.querySelectorAll('input[name=mode]').forEach(i=>i.addEventListener('change',()=>{const mix=document.querySelector('input[name=mode]:checked').value==='mixed';$('mixed').hidden=!mix;$('single').hidden=mix;queueDraft()}));
- ['topic','genre','mood','language','length','structure','parody','parodystyle'].forEach(id=>$(id).addEventListener('change',queueDraft));$('topic').addEventListener('input',queueDraft);
+ ['topic','genre','mood','language','length','structure','verseLines','rhymeScheme','parody','parodystyle'].forEach(id=>$(id).addEventListener('change',queueDraft));$('topic').addEventListener('input',queueDraft);
  $('generate').onclick=generate;$('remix').onclick=generate;
  $('new').onclick=()=>{if(current&&!confirm('Start a new lyric draft? Your saved songs stay in the library.'))return;current=null;$('editor').hidden=true;$('empty').hidden=false;$('heading').textContent='Your blank canvas';$('save').textContent='♡ Save';clearDraft();};
  $('save').onclick=save;
@@ -68,6 +68,21 @@ function bind(){
  $('restore').onclick=()=>$('file').click();$('file').onchange=restore;
  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();save()}if((e.ctrlKey||e.metaKey)&&e.key==='Enter'&&$('studio').hidden===false){e.preventDefault();generate()}});
  if(localStorage.getItem(THEME)==='1')document.body.classList.add('light');
+}
+function findRhymes(){
+ const input=$('rhymeWord'),out=$('rhymeResults'),word=(input.value||'').toLocaleLowerCase().trim().replace(/[^a-z'-]/g,'');
+ if(!word){out.textContent='Enter an English word to search the offline rhyme dictionary.';return}
+ const dict=(data.lyricEngine&&data.lyricEngine.rhymeDictionary)||{};
+ let family=Object.entries(dict).find(([,words])=>words.some(w=>w.toLocaleLowerCase()===word));
+ if(!family)family=Object.entries(dict).find(([key,words])=>!/\\d/.test(key)&&word.endsWith(key)&&words.some(w=>w.toLocaleLowerCase()!==word));
+ if(!family){const tail=word.slice(-2);family=Object.entries(dict).find(([,words])=>words.some(w=>w.toLocaleLowerCase().endsWith(tail)&&w.toLocaleLowerCase()!==word))}
+ if(!family){out.textContent='No close match in the built-in dictionary. Try a common word or a different ending.';return}
+ const matches=Array.from(new Set(family[1].filter(w=>w.toLocaleLowerCase()!==word))).slice(0,24);
+ out.replaceChildren();
+ const note=document.createElement('span');note.className='rhyme-family';note.textContent='Family: '+family[0]+' · '+matches.length+' suggestions';out.append(note);
+ const chips=document.createElement('div');chips.className='rhyme-chips';
+ matches.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='rhyme-chip';b.textContent=w;b.title='Use '+w+' as the search word';b.onclick=()=>{input.value=w;findRhymes()};chips.append(b)});
+ out.append(chips);
 }
 function hash(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return h>>>0}
 function pick(a,n){return a[Math.abs(n)%a.length]}
@@ -118,10 +133,11 @@ function generate(){
    if(genre==='Rap'||genre==='Hip-Hop'||genre==='Trap')lines=lines.map(line=>line+' — '+pickFresh(['every setback turns to fuel','I write my truth across the beat','no borrowed crown, I make my lane'],'rap'));
    if(genre==='Metal'||genre==='Rock')lines=lines.map(line=>line.replace(/light|morning|quiet/gi,'fire'));
   }else lines=[pickFresh(bank,'lang'+lang.id),pickFresh(bank,'lang'+lang.id)];
+  if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'verseExtraJoke'+i));else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
   out.push(...lines,'');
  });
  const lyrics=out.join('\n').trim();
- current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,rhymeScheme:$('rhymeScheme').value,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
+ current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,rhymeScheme:$('rhymeScheme').value,verseLines:Number($('verseLines').value)||4,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
  showEditor();queueDraft();notify('Lyrics generated locally with your selected rhyme pattern.');
 }
 function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save';updateCoach()}
@@ -195,7 +211,7 @@ function save(){
  try{localStorage.setItem(KEY,JSON.stringify(list));$('save').textContent='♥ Saved';notify('Saved in this browser.');updateCount();renderLibrary();queueDraft()}catch(e){notify('Browser storage is full. Export a backup first.')}
 }
 function queueDraft(){clearTimeout(draftTimer);draftTimer=setTimeout(persistDraft,180)}
-function persistDraft(){try{const d={current:current?{...current,title:$('title').value,lyrics:$('lyrics').value}:null,controls:{topic:$('topic').value,genre:$('genre').value,mood:$('mood').value,language:$('language').value,length:$('length').value,structure:$('structure').value,parody:$('parody').checked,parodystyle:$('parodystyle').value,mode:document.querySelector('input[name=mode]:checked').value,mixed:Array.from($('mixed').querySelectorAll('input:checked')).map(i=>i.value)}};localStorage.setItem(DRAFT,JSON.stringify(d))}catch(e){}}
+function persistDraft(){try{const d={current:current?{...current,title:$('title').value,lyrics:$('lyrics').value}:null,controls:{topic:$('topic').value,genre:$('genre').value,mood:$('mood').value,language:$('language').value,length:$('length').value,structure:$('structure').value,verseLines:$('verseLines').value,rhymeScheme:$('rhymeScheme').value,parody:$('parody').checked,parodystyle:$('parodystyle').value,mode:document.querySelector('input[name=mode]:checked').value,mixed:Array.from($('mixed').querySelectorAll('input:checked')).map(i=>i.value)}};localStorage.setItem(DRAFT,JSON.stringify(d))}catch(e){}}
 function restoreDraft(){try{const d=JSON.parse(localStorage.getItem(DRAFT)||'null');if(!d)return;const c=d.controls||{};for(const id of ['topic','genre','mood','language','length','structure','parodystyle'])if(c[id]!==undefined){const el=$(id);if(el.tagName==='TEXTAREA'||Array.from(el.options||[]).some(o=>o.value===String(c[id])))el.value=c[id];}$('parody').checked=!!c.parody;if(c.mode){const radio=document.querySelector('input[name=mode][value="'+c.mode+'"]');if(radio)radio.checked=true}const mix=c.mode==='mixed';$('mixed').hidden=!mix;$('single').hidden=mix;if(Array.isArray(c.mixed))$('mixed').querySelectorAll('input').forEach(i=>i.checked=c.mixed.includes(i.value));if(d.current&&d.current.lyrics){current=d.current;showEditor();notify('Your last draft was restored.')}}catch(e){localStorage.removeItem(DRAFT)}}
 function clearDraft(){localStorage.removeItem(DRAFT)}
 function updateCount(){$('count').textContent=getLib().length}
