@@ -23,6 +23,11 @@ class LyricEngineTests(unittest.TestCase):
         self.assertIn("[Verse 1]", lyrics)
         self.assertIn("[Outro]", lyrics)
 
+    def test_rhyme_scheme_inserts_requested_topic(self):
+        lyrics = generate_lyrics("moonlit roads", rhyme_scheme="AABB", seed=5)
+        self.assertIn("I turn moonlit roads into a spark tonight", lyrics)
+        self.assertIn("We chase that spark until it shines bright", lyrics)
+
     def test_build_writes_static_json_bank(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "lyric_engine.json"
@@ -31,6 +36,9 @@ class LyricEngineTests(unittest.TestCase):
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
             self.assertIn("multilingualFandom", data)
+            self.assertIn("rhymeSchemes", data)
+            self.assertIn("AABB", data["rhymeSchemes"])
+            self.assertIn("ABAB", data["rhymeSchemes"])
 
 
 if __name__ == "__main__":
