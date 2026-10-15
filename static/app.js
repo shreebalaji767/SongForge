@@ -31,6 +31,19 @@ const parodyLines={
  'Romance satire':['You stole my hoodie and my streaming PIN','Our love language is “what should we eat?”','You said “be yourself”; I sent twelve drafts','My heart said soulmate; my brain said “terms apply”'],
  'Genre exaggeration':['One tiny feeling got a cinematic score','I stubbed my toe; the orchestra appeared','A dramatic wind machine followed me to work','My coffee has a character arc tonight']
 };
+const multilingualFandom={
+ zh:['再看一集，天亮也没关系','我的睡眠时间开启了新篇章','只读一章，窗外鸟儿已经开唱','剧情反转赢了，闹钟彻底投降'],
+ ko:['한 편만 더, 해가 떠도 괜찮아','내 수면 시간표도 새 시즌 시작','한 화만 봤는데 새들이 노래해','반전은 이겼고 알람은 졌어'],
+ ja:['あと一話だけ、朝でもかまわない','睡眠時間にも新章が始まった','一話だけのはずが鳥まで歌ってる','伏線回収に勝てず目覚ましは敗北'],
+ hi:['बस एक एपिसोड और, सुबह हो तो होने दो','मेरी नींद ने भी नया आर्क शुरू कर दिया','एक चैप्टर पढ़ा, अब चिड़ियाँ गा रही हैं','क्लिफहैंगर जीता, अलार्म हार गया'],
+ es:['Un episodio más, que amanezca si quiere','Mi horario de sueño estrena otro arco','Vine por un capítulo y cantan los pájaros','Ganó el giro de trama, perdió mi alarma'],
+ fr:['Encore un épisode, que le soleil attende','Mon sommeil entame un nouvel arc narratif','Un chapitre de plus, les oiseaux chantent déjà','Le suspense a gagné, mon réveil a perdu'],
+ de:['Noch eine Folge, der Morgen kann warten','Mein Schlafrhythmus startet einen neuen Handlungsbogen','Ein Kapitel nur, jetzt singen schon die Vögel','Der Cliffhanger gewann, mein Wecker verlor'],
+ pt:['Só mais um episódio, que espere o amanhecer','Meu sono começou um novo arco','Vim por um capítulo e os pássaros já cantam','O suspense venceu, meu despertador perdeu'],
+ ar:['حلقة أخرى فقط، فلتنتظر الشمس قليلاً','جدول نومي بدأ موسماً جديداً','جئت لفصل واحد والطيور بدأت الغناء','فاز التشويق وخسر المنبّه'],
+ it:['Ancora un episodio, l’alba può aspettare','Il mio sonno inizia un nuovo arco narrativo','Un capitolo soltanto, e gli uccelli già cantano','Ha vinto il colpo di scena, ha perso la sveglia'],
+ ru:['Ещё одна серия — рассвет подождёт','Мой режим сна открыл новую сюжетную арку','Зашёл на главу, а птицы уже поют','Клиффхэнгер победил, будильник проиграл']
+};
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function getLib(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
 function notify(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400)}
@@ -89,9 +102,15 @@ function generate(){
   out.push(sec+' — '+lang.name);
   let lines;
   if(isHook)lines=hookLines;
-  else if(parody&&lang.id==='en'){
-   lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
-   if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
+  else if(parody){
+   if(lang.id==='en'){
+    lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
+    if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
+   }else if(angle==='Anime / fandom obsession'&&multilingualFandom[lang.id]){
+    lines=[pickFresh(multilingualFandom[lang.id],'localized'+lang.id),pickFresh(multilingualFandom[lang.id],'localized'+lang.id)];
+   }else{
+    lines=[pickFresh(bank,'parody'+lang.id),pickFresh(bank,'parody'+lang.id)];
+   }
   }else if(lang.id==='en'){
    const beat=isBridge?'bridge':i===0?'setup':isVerse?'rise':'resolve';
    lines=[pickFresh(arcs[beat],'arc'+beat),pickFresh(moodLines,'mood'+mood)];
