@@ -54,6 +54,10 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
+            self.assertGreaterEqual(data["version"], 5)
+            for angle, lines in data["parodyLines"].items():
+                self.assertGreaterEqual(len(lines), 32, angle)
+                self.assertEqual(len(lines), len(set(lines)), angle)
             self.assertIn("multilingualFandom", data)
             self.assertIn("rhymeSchemes", data)
             self.assertIn("AABB", data["rhymeSchemes"])
