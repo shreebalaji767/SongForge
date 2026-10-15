@@ -32,7 +32,7 @@ The offline composer uses original templates and language resources, so it is a 
 - Single-language and mixed-language lyrics
 - Optional original parody/comedy mode
 - Editable lyrics with topic-, mood-, and genre-aware templates
-- Live Lyric Coach checks section structure, line count, repeated lines, and rough singability
+- Live Lyric Coach checks section structure, line count, repeated lines, rough singability, possible English end-rhyme groups, and estimated syllable spread
 - Coach feedback updates while editing and ignores intentional repeats inside chorus/hook sections
 - Heuristic score is guidance only; it does not judge artistic quality or validate translations
 - Automatic draft recovery in the same browser
