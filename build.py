@@ -55,7 +55,7 @@ for reference in parser.assets:
     if not target.is_relative_to(ROOT) or not target.exists():
         raise SystemExit(f"Broken local HTML asset reference: {reference}")
 js = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
-missing_ids = sorted(set(re.findall(r"\\$\\(['\\"]([^'\\"]+)['\\"]\\)", js)) - parser.ids - {"lyricCoach"})
+missing_ids = sorted(set(re.findall(r"\$\(['"]([^'"]+)['"]\)", js)) - parser.ids - {"lyricCoach"})
 if missing_ids:
     raise SystemExit("JavaScript references missing HTML IDs: " + ", ".join(missing_ids))
 
@@ -78,7 +78,7 @@ for key in ("phrases", "parodyLines", "multilingualFandom", "arcs", "rhymeScheme
 
 # Confirm the service worker only pre-caches assets that will be deployed.
 service_worker = (ROOT / "sw.js").read_text(encoding="utf-8")
-match = re.search(r"const SHELL=\\[(.*?)\\];", service_worker, re.S)
+match = re.search(r"const SHELL=\[(.*?)\];", service_worker, re.S)
 if not match:
     raise SystemExit("Service worker shell asset list was not found.")
 for asset in re.findall(r"'([^']+)'", match.group(1)):
