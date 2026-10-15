@@ -185,15 +185,16 @@ function generate(){
  function structuredZhLines(section){
   if(!zhStructuredForm)return null;
   const key=section.toLocaleLowerCase();
-  if(key.includes('intro'))return zhStructuredForm.Intro;
-  if(key.includes('verse 1'))return zhStructuredForm['Verse 1'];
-  if(key.includes('pre-chorus'))return zhStructuredForm['Pre-Chorus'];
-  if(key.includes('final chorus'))return zhStructuredForm['Final Chorus'];
-  if(key.includes('verse 2'))return zhStructuredForm['Verse 2'];
-  if(key.includes('bridge'))return zhStructuredForm.Bridge;
-  if(key.includes('outro'))return zhStructuredForm.Outro;
-  if(key.includes('chorus')||key.includes('hook'))return zhStructuredForm.Chorus;
-  return null;
+  let lines=null;
+  if(key.includes('intro'))lines=zhStructuredForm.Intro;
+  else if(key.includes('verse 1'))lines=zhStructuredForm['Verse 1'];
+  else if(key.includes('pre-chorus'))lines=zhStructuredForm['Pre-Chorus'];
+  else if(key.includes('final chorus'))lines=zhStructuredForm['Final Chorus'];
+  else if(key.includes('verse 2'))lines=zhStructuredForm['Verse 2'];
+  else if(key.includes('bridge'))lines=zhStructuredForm.Bridge;
+  else if(key.includes('outro'))lines=zhStructuredForm.Outro;
+  else if(key.includes('chorus')||key.includes('hook'))lines=zhStructuredForm.Chorus;
+  return lines?lines.map(line=>line.replaceAll('{topic}',topicPhrase)):null;
  }
  const arcs=engine.arcs;
  const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
