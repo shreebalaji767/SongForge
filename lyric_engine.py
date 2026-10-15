@@ -416,7 +416,9 @@ RHYME_DICTIONARY = {
     "door",
     "adore"
   ]
-}\n\nRHYME_SCHEMES = {
+}
+
+RHYME_SCHEMES = {
  "Free verse": [],
  "AABB": [
   "I turn {topic} into a spark tonight",
