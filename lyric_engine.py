@@ -812,9 +812,6 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
             bridge = form["Bridge"][:]
             final_chorus = form["Final Chorus"][:]
             outro = form["Outro"][:]
-            if verse_lines < 8:
-                verse_one = verse_one[:max(2, verse_lines)]
-                verse_two = verse_two[:max(2, verse_lines)]
             lyrics = (
                 "[Intro — 说唱口白｜慵懒、戏剧化]\n" + "\n".join(intro)
                 + "\n\n[Verse 1 — 轻快说唱｜俏皮切分]\n" + "\n".join(verse_one)
