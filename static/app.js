@@ -59,6 +59,19 @@ function bind(){
  $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueDraft()}});
  $('title').addEventListener('input',()=>{if(current){current.title=$('title').value;$('heading').textContent=$('title').value||'Untitled Song';queueDraft()}});
  $('copy').onclick=()=>copy($('lyrics').value);
+ $('copyHook').onclick=()=>{
+  const lines=$('lyrics').value.split(/\\r?\\n/);let active=false,found=false,out=[];
+  for(const line of lines){
+   if(/^\\s*\\[.*\\]\\s*$/.test(line)){active=/chorus|hook/i.test(line);if(active){found=true;out.push(line)}else if(found)break;continue}
+   if(active)out.push(line);
+  }
+  const hook=out.join('\\n').trim();if(hook)copy(hook);else notify('No [Chorus] or [Hook] section found.');
+ };
+ $('cleanLyrics').onclick=()=>{
+  const cleaned=$('lyrics').value.split(/\\r?\\n/).map(line=>line.trimEnd()).join('\\n').replace(/^[ \\t]+|[ \\t]+$/gm,'').replace(/\\n{3,}/g,'\\n\\n').replace(/\\n*\\s*(\\[[^\\]]+\\])\\s*\\n*/g,'\\n\\n$1\\n').replace(/^\\n+|\\n+$/g,'');
+  $('lyrics').value=cleaned;if(current)current.lyrics=cleaned;
+  $('words').textContent=countWords(cleaned)+' words · Formatting cleaned';updateCoach();queueDraft();notify('Whitespace cleaned; lyric wording preserved.');
+ };
  $('download').onclick=()=>download(songText(),slug($('title').value||'song')+'.txt','text/plain;charset=utf-8');
  $('exportMd').onclick=()=>download('# '+($('title').value.trim()||'Untitled Song')+'\n\n'+$('lyrics').value,slug($('title').value||'song')+'.md','text/markdown;charset=utf-8');
  $('theme').onclick=()=>{document.body.classList.toggle('light');localStorage.setItem(THEME,document.body.classList.contains('light')?'1':'0')};
