@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "phrases": {
     "Hopeful": [
       "I turn the page and let the morning in",
@@ -380,9 +380,9 @@
     ],
     "ABAB": [
       "I carry {topic} into the night",
-      "I find the nerve to begin again",
+      "I find the courage deep within",
       "We turn the shadows into light",
-      "And let the morning wash away the rain"
+      "And let a brand-new day begin"
     ]
   },
   "rhymeDictionary": {
