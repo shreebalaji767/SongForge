@@ -1,5 +1,7 @@
 # SongForge — Multilingual Lyrics Lab
 
+**Current release: v5.0** — larger unique parody phrase banks, stronger build-time validation, and an updated offline cache so installed copies pick up the release.
+
 A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
 ## Installable PWA, responsive UI, and branding
