@@ -92,6 +92,53 @@ function findRhymes(){
 function hash(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return h>>>0}
 function pick(a,n){return a[Math.abs(n)%a.length]}
 function topicTitle(topic,seed){const words=topic.replace(/[^\p{L}\p{N}\s'-]/gu,' ').trim().split(/\s+/).filter(Boolean).slice(0,4);if(!words.length)return pick(['Neon Afterglow','Paper Moons','Electric Heart','Almost Tomorrow','Midnight Echoes','A Thousand Little Stars'],seed);return words.map(w=>w.charAt(0).toLocaleUpperCase()+w.slice(1)).join(' ')}
+function dedupeGeneratedLyrics(text,engine,defaultLangId,seed){
+ const used=new Map(),lines=text.split('\n'),out=[];
+ const normalize=line=>line.toLocaleLowerCase().normalize('NFKC').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+ const fallbackFor=id=>{
+  const pools=[];
+  if(id==='zh'){
+   const moods=engine.localizedPhrases&&engine.localizedPhrases.zh||{};
+   Object.values(moods).forEach(bank=>pools.push(...bank));
+   if(engine.localizedRap&&engine.localizedRap.zh)pools.push(...engine.localizedRap.zh);
+   const parodyBanks=engine.localizedParody&&engine.localizedParody.zh||{};
+   Object.values(parodyBanks).forEach(bank=>pools.push(...bank));
+  }else{
+   Object.values(engine.phrases||{}).forEach(bank=>pools.push(...bank));
+   Object.values(engine.arcs||{}).forEach(bank=>pools.push(...bank));
+   Object.values(engine.parodyLines||{}).forEach(bank=>pools.push(...bank));
+   const language=(data.languages||[]).find(item=>item.id===id);
+   if(language&&language.lines)pools.push(...language.lines);
+  }
+  return Array.from(new Set(pools));
+ };
+ let section='',sectionLang=defaultLangId, fallback=[],cursor=Math.abs(seed)%100000;
+ lines.forEach(line=>{
+  const header=line.match(/^\[([^\]]+)\]\s+—\s+(.+)$/);
+  if(header){
+   section=header[1].toLocaleLowerCase();
+   const lang=(data.languages||[]).find(item=>item.name===header[2]);
+   sectionLang=lang?lang.id:defaultLangId;
+   fallback=fallbackFor(sectionLang);
+   out.push(line);return;
+  }
+  if(!line.trim()){out.push(line);return}
+  const key=normalize(line),previous=used.get(key);
+  const hook=section.includes('chorus')||section.includes('hook');
+  if(previous!==undefined&&!(hook&&(previous.includes('chorus')||previous.includes('hook')))){
+   let replacement='';
+   for(let n=0;n<fallback.length;n++){
+    const candidate=fallback[(cursor+n)%fallback.length],candidateKey=normalize(candidate);
+    if(candidateKey&&!used.has(candidateKey)&&candidateKey!==key){replacement=candidate;cursor=(cursor+n+1)%Math.max(1,fallback.length);break}
+   }
+   if(replacement)line=replacement;
+  }
+  const finalKey=normalize(line);
+  if(finalKey&&!used.has(finalKey))used.set(finalKey,section);
+  out.push(line);
+ });
+ return out.join('\n');
+}
 function generate(){
  if(!data.languages)return;
  const topic=$('topic').value.trim()||'following a dream through the night',genre=$('genre').value,mood=$('mood').value,langs=selected().filter(Boolean);
@@ -156,7 +203,7 @@ function generate(){
   if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'joke'));else if(parody&&lang.id==='zh'&&localizedParody.zh&&localizedParody.zh[angle])lines.push(pickFresh(localizedParody.zh[angle],'localizedParodyzh'));else if(lang.id==='zh'&&localizedPhrases.zh){const zhExtra=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful;const zhRap=['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh;lines.push(pickFresh(zhRap?localizedRap.zh:zhExtra,zhRap?'localizedRapzh':'localizedPhraseszh'+mood));}else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
   out.push(...lines,'');
  });
- const lyrics=out.join('\n').trim();
+ const lyrics=dedupeGeneratedLyrics(out.join('\n').trim(),engine,hookLang.id,seed);
  current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,rhymeScheme:$('rhymeScheme').value,verseLines:Number($('verseLines').value)||4,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
  showEditor();queueDraft();notify('Lyrics generated locally with your selected rhyme pattern.');
 }
@@ -209,10 +256,14 @@ function updateCoach(){
 function countWords(s){return(s.match(/[\p{L}\p{N}]+/gu)||[]).length}
 function rhymeKey(word){
  const w=(word||'').toLocaleLowerCase().replace(/[^a-z]/g,'');
- if(w.length<3)return '';
- const endings=['ation','ition','ight','ound','ough','eart','air','are','ore','ower','ower','ame','ance','ence','ound','ound','ound','ain','ake','ate','ell','est','end','old','ost','ing','ong','uck','ush','ide','ove','ime','all','own','ay','ee','ow','oo','ue','ear','ire','ore','art','ent','ill','ink','ash','ack','ump'];
- const ending=endings.sort((a,b)=>b.length-a.length).find(x=>w.endsWith(x));
- return ending||w.slice(-3);
+ if(w.length<2)return '';
+ const dictionary=data&&data.lyricEngine&&data.lyricEngine.rhymeDictionary||{};
+ for(const [family,words] of Object.entries(dictionary)){
+  if(words.some(candidate=>String(candidate).toLocaleLowerCase()===w))return family;
+ }
+ const endings=['ation','ition','ight','ound','ough','eart','air','are','ore','ower','ame','ance','ence','ain','ake','ate','ell','est','end','old','ost','ing','ong','uck','ush','ide','ove','ime','all','own','ay','ee','ow','oo','ue','ear','ire','art','ent','ill','ink','ash','ack','ump'];
+ endings.sort((a,b)=>b.length-a.length);
+ return endings.find(x=>w.endsWith(x))||w.slice(-2);
 }
 function syllableCount(line){
  const words=(line.toLowerCase().match(/[a-z]+/g)||[]);
