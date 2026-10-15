@@ -135,9 +135,11 @@ function ensureCoach(){
 }
 function updateCoach(){
  if(!$('lyrics'))return;
- const raw=$('lyrics').value||'',lines=raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),body=lines.filter(x=>!/^\[.*\]$/.test(x)),norm=body.map(x=>x.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()).filter(Boolean);
- const seen=new Set(),dupes=[];norm.forEach((line,i)=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
- const headers=lines.filter(x=>/^\[.*\]$/.test(x)),hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
+ const raw=$('lyrics').value||'',lines=raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),headers=lines.filter(x=>/^\[.*\]$/.test(x));
+ let activeSection='';const entries=lines.map(line=>{if(/^\[.*\]$/.test(line))activeSection=line;return{line,section:activeSection}}).filter(x=>!/^\[.*\]$/.test(x.line));
+ const body=entries.map(x=>x.line),norm=entries.filter(x=>!/chorus|hook/i.test(x.section)).map(x=>x.line.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()).filter(Boolean);
+ const seen=new Set(),dupes=[];norm.forEach(line=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
+ const hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
  let score=100,tips=[];
  if(body.length<8){score-=20;tips.push('Add more lyric lines to develop the idea.')}
  if(!hasHook){score-=12;tips.push('Add a [Chorus] or [Hook] section to give listeners an anchor.')}
