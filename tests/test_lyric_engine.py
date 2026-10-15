@@ -27,9 +27,9 @@ class LyricEngineTests(unittest.TestCase):
 
     def test_parody_verses_avoid_repeated_lines(self):
         lyrics = generate_lyrics("romance satire", parody=True, seed=17, verse_lines=8)
-        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0].splitlines()
-        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\\n\\n[Outro]", 1)[0].splitlines()
-        chorus = lyrics.split("[Chorus]\\n", 1)[1].split("\\n\\n[Verse 2]", 1)[0].splitlines()
+        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0].splitlines()
+        verse_two = lyrics.split("[Verse 2]\n", 1)[1].split("\n\n[Outro]", 1)[0].splitlines()
+        chorus = lyrics.split("[Chorus]\n", 1)[1].split("\n\n[Verse 2]", 1)[0].splitlines()
         self.assertEqual(len(verse_one), 8)
         self.assertEqual(len(verse_two), 8)
         self.assertEqual(len(set(verse_one + verse_two)), 16)
