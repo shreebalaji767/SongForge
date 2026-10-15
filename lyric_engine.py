@@ -30,19 +30,99 @@ PHRASES = {
 }
 PARODY = {
  "Anime / fandom obsession":[
-  "One more episode, then sunrise (that is a lie)","My sleep schedule has entered a new arc","I came for one chapter, now birds are singing","The cliffhanger won; my alarm clock lost","I paused to get a snack and missed three plot twists","My watchlist needs its own apartment","The hero trained less than I refreshed the page","I said one episode; the season heard twenty","My blanket knows the opening theme by heart","The credits rolled; my bedtime filed a complaint","I memorized the lore but forgot my own lunch","My favorite character has more screen time in my head","The recap is short; my theories need a book","I bought one volume and adopted the whole shelf","My alarm said get up; the fandom said one more","I can explain the magic system, not my sleep debt","The plot twist hit harder than my morning coffee","I came for the art and stayed for the emotional damage","My tabs have formed a very niche committee","The finale ended; my imaginary sequel began","I called it research; my homework called it betrayal","My wallet fears every limited-edition release","I know the side characters better than my neighbors","The next arc starts after I pretend to be productive"
+  "One more episode, then sunrise (that is a lie)","My sleep schedule has entered a new arc","I came for one chapter, now birds are singing","The cliffhanger won; my alarm clock lost","I paused to get a snack and missed three plot twists","My watchlist needs its own apartment","The hero trained less than I refreshed the page","I said one episode; the season heard twenty","My blanket knows the opening theme by heart","The credits rolled; my bedtime filed a complaint","I memorized the lore but forgot my own lunch","My favorite character has more screen time in my head","The recap is short; my theories need a book","I bought one volume and adopted the whole shelf","My alarm said get up; the fandom said one more","I can explain the magic system, not my sleep debt","The plot twist hit harder than my morning coffee","I came for the art and stayed for the emotional damage","My tabs have formed a very niche committee","The finale ended; my imaginary sequel began","I called it research; my homework called it betrayal","My wallet fears every limited-edition release","I know the side characters better than my neighbors","The next arc starts after I pretend to be productive",
+  "My watch history has more seasons than my life plan",
+  "I know the opening song but not today's date",
+  "The recap ended; my detective board began",
+  "I called it a quick binge; the sun disagreed",
+  "My fictional crush has better communication skills",
+  "The manga shelf is now load-bearing architecture",
+  "I skipped one page and invented three conspiracies",
+  "My free time has been acquired by the next episode",
+  "The subtitle delay created a brand-new plot twist",
+  "I paused the finale to emotionally prepare for the finale",
+  "My fan theory has footnotes and absolutely no evidence",
+  "The merch arrived before my responsibilities did",
+  "I speak fluent lore and beginner-level small talk",
+  "My weekend schedule is just release dates in disguise",
+  "I promised to sleep after the arc; the arc had sequels",
+  "My browser tabs are a museum of unfinished cliffhangers"
  ],
  "Everyday-life chaos":[
-  "My laundry pile just gained a final boss","I made a to-do list; it asked for a day off","The fridge light knows my midnight secrets","I lost my keys while holding them in my hand","My coffee got cold while I searched for my coffee","The dishes formed a union and elected a spokesperson","I cleaned one drawer; the whole room wants a sequel","My calendar sent a meeting invite to my nap","I bought a planner to organize my other planners","The grocery list said milk; I came home with snacks","My houseplants look disappointed in my life choices","I folded one shirt and called it personal growth","The vacuum ate a sock and denied everything","My alarm and I are no longer on speaking terms","I opened one email and unlocked seven new problems","The bin is full; apparently that is a future-me issue"
+  "My laundry pile just gained a final boss","I made a to-do list; it asked for a day off","The fridge light knows my midnight secrets","I lost my keys while holding them in my hand","My coffee got cold while I searched for my coffee","The dishes formed a union and elected a spokesperson","I cleaned one drawer; the whole room wants a sequel","My calendar sent a meeting invite to my nap","I bought a planner to organize my other planners","The grocery list said milk; I came home with snacks","My houseplants look disappointed in my life choices","I folded one shirt and called it personal growth","The vacuum ate a sock and denied everything","My alarm and I are no longer on speaking terms","I opened one email and unlocked seven new problems","The bin is full; apparently that is a future-me issue",
+  "My clean laundry is living in the basket ecosystem",
+  "I opened the fridge like it might have new content",
+  "My budget saw the checkout total and logged off",
+  "I cleaned for five minutes and needed a recovery episode",
+  "The delivery tracker has become my main relationship",
+  "I went shopping for one thing and adopted seventeen",
+  "My phone is at one percent and so is my patience",
+  "I put the important note somewhere very important",
+  "The leftovers have outlived three meal plans",
+  "My calendar is just apologies with timestamps",
+  "I made a quick snack and used every pan I own",
+  "The laundry timer and I have different definitions of done",
+  "I arrived early, then spent ten minutes finding the room",
+  "My plant is thriving out of pure spite",
+  "I searched for my glasses while wearing them",
+  "Future me has filed a complaint about present me"
  ],
  "Internet meme energy":[
-  "The group chat says touch grass; I sent a meme","My last two brain cells are doing a dance","I went viral in a chat with three close friends","The algorithm knows my snack routine","I typed LOL with a completely neutral face","My screen-time report just called an intervention","I sent a voice note long enough to need chapters","The Wi-Fi blinked once; I saw my entire life flash","I opened one short video and lost a whole afternoon","My camera roll is ninety percent screenshots of jokes","I said quick reply, then wrote a small novel","The typing bubble vanished; now I need closure","I have twelve tabs open and no idea why","My password hint is now a philosophical question","I muted the group chat; the memes found another route","My digital detox sent me a push notification"
+  "The group chat says touch grass; I sent a meme","My last two brain cells are doing a dance","I went viral in a chat with three close friends","The algorithm knows my snack routine","I typed LOL with a completely neutral face","My screen-time report just called an intervention","I sent a voice note long enough to need chapters","The Wi-Fi blinked once; I saw my entire life flash","I opened one short video and lost a whole afternoon","My camera roll is ninety percent screenshots of jokes","I said quick reply, then wrote a small novel","The typing bubble vanished; now I need closure","I have twelve tabs open and no idea why","My password hint is now a philosophical question","I muted the group chat; the memes found another route","My digital detox sent me a push notification",
+  "My draft folder is a graveyard of perfect comebacks",
+  "I sent one sticker and the chat declared a holiday",
+  "The algorithm served me my own personality back",
+  "My focus mode is ignoring me with impressive consistency",
+  "I opened the comments and lost faith in punctuation",
+  "My online cart is practicing financial fiction",
+  "I watched a tutorial to avoid doing the actual task",
+  "The notification badge has achieved sentience",
+  "I typed 'haha' while making the face of a tax auditor",
+  "My feed refreshed and my plans evaporated",
+  "I took a screen break to look at another screen",
+  "The meme was niche but my commitment was global",
+  "I left one unread message to preserve the mystery",
+  "My digital footprint needs comfortable walking shoes",
+  "I said log off, then checked one last thing",
+  "My search history could host a very confusing quiz show"
  ],
  "Romance satire":[
-  "You stole my hoodie and my streaming PIN","Our love language is what should we eat","You said be yourself; I sent twelve drafts","My heart said soulmate; my brain said terms apply","You asked where this is going; I opened a spreadsheet","We share one brain cell and a family streaming plan","You left me on read; I wrote a trilogy in my head","Our first date had more plot twists than a season finale","You said choose a movie; now the sun is coming up","I made a pros-and-cons list; your smile broke the chart","You sent a heart emoji; I checked its legal meaning","We flirt like two shy robots with a software update","You called me your person; I saved the screenshot twice","I practiced saying I love you and accidentally said Wi-Fi","You met my parents; my anxiety brought a PowerPoint","Our couple selfie took more takes than a feature film","You said we need space; I measured the living room","I wrote you a love song; autocorrect made it a breakup","Your goodnight text arrived; I analyzed every punctuation mark","We made a shared calendar for spontaneous romance","You stole one fry; I reconsidered our entire future","My love is unconditional, except when you eat my leftovers","I made a playlist; you shuffled past my emotional arc","You said trust your heart; mine requested two-factor login"
+  "You stole my hoodie and my streaming PIN","Our love language is what should we eat","You said be yourself; I sent twelve drafts","My heart said soulmate; my brain said terms apply","You asked where this is going; I opened a spreadsheet","We share one brain cell and a family streaming plan","You left me on read; I wrote a trilogy in my head","Our first date had more plot twists than a season finale","You said choose a movie; now the sun is coming up","I made a pros-and-cons list; your smile broke the chart","You sent a heart emoji; I checked its legal meaning","We flirt like two shy robots with a software update","You called me your person; I saved the screenshot twice","I practiced saying I love you and accidentally said Wi-Fi","You met my parents; my anxiety brought a PowerPoint","Our couple selfie took more takes than a feature film","You said we need space; I measured the living room","I wrote you a love song; autocorrect made it a breakup","Your goodnight text arrived; I analyzed every punctuation mark","We made a shared calendar for spontaneous romance","You stole one fry; I reconsidered our entire future","My love is unconditional, except when you eat my leftovers","I made a playlist; you shuffled past my emotional arc","You said trust your heart; mine requested two-factor login",
+  "We split the bill and merged our streaming accounts",
+  "You said 'I'm fine' and my spreadsheet turned red",
+  "Our anniversary reminder arrived with a software update",
+  "I flirted confidently, then waved at the wrong person",
+  "You know my coffee order and my browser password hint",
+  "We planned a quiet night; the group chat filed an appeal",
+  "Your playlist skipped my song and I requested mediation",
+  "I sent a voice note with director's commentary",
+  "We define spontaneity as booking dinner without a poll",
+  "You borrowed my charger and gained diplomatic immunity",
+  "Our relationship status needs a terms-and-conditions page",
+  "I said 'miss you' then checked your location in my memory",
+  "You left a crumb in bed; romance entered arbitration",
+  "We picked a wedding song before picking a restaurant",
+  "My love notes have version history and tracked changes",
+  "You said 'whatever you want' and the quest began again"
  ],
  "Genre exaggeration":[
-  "One tiny feeling got a cinematic score","I stubbed my toe; the orchestra appeared","A dramatic wind machine followed me to work","My coffee has a character arc tonight","I missed one bus; the soundtrack turned tragic","A minor inconvenience got a twelve-part documentary","I dropped a spoon; the heavens issued a warning","My grocery trip needs a director's cut","I sent one text with the force of a thousand drums","The toaster popped; I heard the final boss theme","I lost one sock; the violins began to weep","A tiny plot twist summoned a choir from the clouds","My Monday got a budget bigger than a blockbuster","I spilled some tea; the narrator said previously on","One awkward wave deserved a slow-motion replay","The printer jammed; the soundtrack entered its villain era"
+  "One tiny feeling got a cinematic score","I stubbed my toe; the orchestra appeared","A dramatic wind machine followed me to work","My coffee has a character arc tonight","I missed one bus; the soundtrack turned tragic","A minor inconvenience got a twelve-part documentary","I dropped a spoon; the heavens issued a warning","My grocery trip needs a director's cut","I sent one text with the force of a thousand drums","The toaster popped; I heard the final boss theme","I lost one sock; the violins began to weep","A tiny plot twist summoned a choir from the clouds","My Monday got a budget bigger than a blockbuster","I spilled some tea; the narrator said previously on","One awkward wave deserved a slow-motion replay",
+  "My tiny sigh came with a stadium reverb",
+  "I made toast like the fate of kingdoms depended on it",
+  "The door creaked and the brass section filed in",
+  "I lost a pen and summoned a tragic backstory",
+  "My commute received a full orchestral overture",
+  "The microwave beeped like the end of civilization",
+  "I tripped on air; the camera pulled back dramatically",
+  "A minor typo triggered the director's commentary",
+  "I opened a spreadsheet and the choir hit a high note",
+  "The weather app announced rain like a prophecy",
+  "My inbox filled up; the violins demanded hazard pay",
+  "I missed a turn and the narrator whispered destiny",
+  "The elevator stopped; the soundtrack entered act three",
+  "I dropped a grape and the slow-motion budget doubled",
+  "My lunch break ended with a season-finale cliffhanger",
+  "The printer blinked and the villain theme began","The printer jammed; the soundtrack entered its villain era"
  ]
 }
 FANDOM = {
@@ -443,7 +523,7 @@ RHYME_SCHEMES = {
   "And let the morning wash away the rain"
  ]
 }
-ENGINE = {"version":3,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
+ENGINE = {"version":5,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
 
 def build_static_data(destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
