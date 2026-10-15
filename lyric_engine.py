@@ -622,12 +622,103 @@ RHYME_SCHEMES = {
  ],
  "ABAB": [
   "I carry {topic} into the night",
-  "I find the nerve to begin again",
+  "I find the courage deep within",
   "We turn the shadows into light",
-  "And let the morning wash away the rain"
+  "And let a brand-new day begin"
  ]
 }
-ENGINE = {"version":6,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
+ENGINE = {"version":7,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
+
+
+
+def normalize_lyric_line(line: str) -> str:
+    """Normalize a lyric line for duplicate detection without stripping Unicode letters."""
+    return re.sub(r"[^\w]+", " ", line.casefold(), flags=re.UNICODE).strip()
+
+
+def rhyme_key(word: str) -> str:
+    """Return a conservative offline English rhyme family, preferring curated families."""
+    word = re.sub(r"[^a-z]", "", (word or "").casefold())
+    if len(word) < 2:
+        return ""
+    for family, words in RHYME_DICTIONARY.items():
+        if word in {candidate.casefold() for candidate in words}:
+            return family
+    endings = sorted(
+        (ending for ending in RHYME_DICTIONARY if not ending[-1:].isdigit()),
+        key=len, reverse=True,
+    )
+    for ending in endings:
+        if len(ending) >= 3 and word.endswith(ending):
+            return ending
+    return word[-2:] if len(word) >= 4 else ""
+
+
+def end_rhyme_pairs(lines: list[str]) -> list[tuple[str, str]]:
+    """Return distinct end-word pairs sharing a curated rhyme family."""
+    groups: dict[str, list[str]] = {}
+    for line in lines:
+        words = re.findall(r"[A-Za-z']+", line)
+        if words:
+            word = words[-1].strip("'")
+            key = rhyme_key(word)
+            if key:
+                groups.setdefault(key, []).append(word.casefold())
+    return [
+        (key, " / ".join(dict.fromkeys(words)))
+        for key, words in groups.items()
+        if len(set(words)) > 1
+    ]
+
+
+def _quality_fallbacks(language: str) -> list[str]:
+    """Pool unused local lines to repair accidental repeats without network calls."""
+    if language == "zh":
+        pools = list(LOCALIZED_PHRASES.get("zh", {}).values())
+        lines = [line for bank in pools for line in bank]
+        lines += list(LOCALIZED_RAP.get("zh", []))
+        lines += [line for bank in LOCALIZED_PARODY.get("zh", {}).values() for line in bank]
+        return lines
+    lines = [line for bank in PHRASES.values() for line in bank]
+    lines += [line for bank in ARCS.values() for line in bank]
+    lines += [line for bank in PARODY.values() for line in bank]
+    lines += [line for bank in LOCALIZED_RAP.values() for line in bank]
+    return lines
+
+
+def avoid_duplicate_lines(lyrics: str, language: str = "en", seed: int | None = None) -> str:
+    """Replace accidental repeated lyric lines; section labels and repeated hooks are exempt."""
+    rng = random.Random(seed)
+    fallback = list(dict.fromkeys(_quality_fallbacks(language)))
+    rng.shuffle(fallback)
+    used: set[str] = set()
+    section = ""
+    output: list[str] = []
+    for line in lyrics.splitlines():
+        if line.startswith("[") and "]" in line:
+            section = line[1:line.index("]")].casefold()
+            output.append(line)
+            continue
+        if not line.strip():
+            output.append(line)
+            continue
+        key = normalize_lyric_line(line)
+        intentional_hook = "chorus" in section or "hook" in section
+        if key and key in used and not intentional_hook:
+            replacement = next(
+                (candidate for candidate in fallback
+                 if normalize_lyric_line(candidate) not in used
+                 and normalize_lyric_line(candidate) != key),
+                None,
+            )
+            if replacement:
+                line = replacement
+                key = normalize_lyric_line(line)
+        if key:
+            used.add(key)
+        output.append(line)
+    return "\n".join(output)
+
 
 def build_static_data(destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -693,12 +784,13 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
             verse1 = [line + " — I write my truth across the beat" for line in verse1]
             verse2 = [line + " — I write my truth across the beat" for line in verse2]
 
-    return (
+    lyrics = (
         "[Verse 1]\n" + "\n".join(verse1[:verse_lines])
         + "\n\n[Chorus]\n" + "\n".join(chorus_lines)
         + "\n\n[Verse 2]\n" + "\n".join(verse2[:verse_lines])
         + "\n\n[Outro]\n" + "\n".join(outro_lines)
     )
+    return avoid_duplicate_lines(lyrics, language=language, seed=seed)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate original template-based SongForge lyrics locally.")
