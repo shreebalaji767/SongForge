@@ -3,6 +3,7 @@
 from pathlib import Path
 import json
 import shutil
+from lyric_engine import build_static_data
 
 ROOT = Path(__file__).resolve().parent
 DIST = ROOT / "dist"
@@ -21,10 +22,13 @@ with (ROOT / "content" / "catalog.json").open(encoding="utf-8") as catalog_file:
 if not catalog.get("languages") or not catalog.get("genres") or not catalog.get("moods"):
     raise SystemExit("Catalog must contain languages, genres, and moods.")
 
+# Generate the browser's free, offline lyric bank with Python at build time.
+build_static_data(ROOT / "content" / "lyric_engine.json")
+
 if DIST.exists():
     shutil.rmtree(DIST)
 DIST.mkdir(parents=True)
 shutil.copy2(ROOT / "index.html", DIST / "index.html")
 shutil.copytree(ROOT / "static", DIST / "static")
 shutil.copytree(ROOT / "content", DIST / "content")
-print(f"Validated catalog ({len(catalog['languages'])} languages) and built static site: {DIST}")
+print(f"Validated catalog ({len(catalog['languages'])} languages), generated Python lyric bank, and built static site: {DIST}")
