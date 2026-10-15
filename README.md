@@ -1,6 +1,6 @@
 # SongForge — Multilingual Lyrics Lab
 
-A static, offline-capable songwriting studio for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode.
+A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
 ## Principles
 
@@ -10,6 +10,7 @@ A static, offline-capable songwriting studio for original lyrics in one or multi
 - Browser `localStorage` for drafts, favorites, preferences, and library
 - Export/import library backups as JSON
 - No mandatory AI API or API keys
+- Lyrics only: no audio, music, vocals, or beat generation
 
 ## Build
 
@@ -19,7 +20,7 @@ Requires Python 3.10+; no third-party packages are required.
 python build.py
 ```
 
-The generated site is written to `dist/`. Open `dist/index.html` locally or deploy the contents of `dist/` to a static host. For GitHub Pages, use the included workflow.
+The generated site is written to `dist/`. Open `dist/index.html` locally or deploy the contents of `dist/` to a static host. For GitHub Pages, enable Pages in **Repository Settings → Pages** and set the build/deployment source to **GitHub Actions**. The included workflow then builds and deploys the `dist/` folder on pushes to `main`.
 
 ## Generator expectations
 
