@@ -1,0 +1,594 @@
+{
+  "version": 3,
+  "phrases": {
+    "Hopeful": [
+      "I turn the page and let the morning in",
+      "A thousand small beginnings start to shine",
+      "The road is long, but I can learn to fly",
+      "I plant a little courage in the light"
+    ],
+    "Heartbroken": [
+      "Your echo lingers in the quiet room",
+      "I keep our old September in a song",
+      "The space you left is louder than the rain",
+      "I fold the memories and carry on"
+    ],
+    "Dreamy": [
+      "The moon is painting silver on the street",
+      "We drift like paper planets through the blue",
+      "A secret constellation calls my name",
+      "The night is soft enough to hold a dream"
+    ],
+    "Energetic": [
+      "We hit the ground like thunder in the night",
+      "No slowing down until the skyline glows",
+      "Turn every doubt into a battle cry",
+      "Our restless hearts are racing with the drums"
+    ],
+    "Melancholic": [
+      "The evening leaves its blue upon my hands",
+      "Some goodbyes take the long way home",
+      "I hear the rain replaying yesterday",
+      "A faded photograph still knows my name"
+    ],
+    "Romantic": [
+      "Your laughter makes a sunrise of the room",
+      "Two shadows dancing underneath the stars",
+      "I find my home in every word you say",
+      "The whole wide world gets quiet next to you"
+    ],
+    "Angry": [
+      "I will not wear the chains you made for me",
+      "Let every locked door hear me break the silence",
+      "I turn the pressure into gasoline",
+      "You wrote the rules, now watch me rewrite them"
+    ],
+    "Triumphant": [
+      "I climbed the walls that fear built in my way",
+      "The finish line is only one more start",
+      "Let every scar become a banner in the sky",
+      "I earned this sunrise one step at a time"
+    ],
+    "Nostalgic": [
+      "Old summer streets still know the sound of us",
+      "A paper note can time-travel through the years",
+      "The radio brings back that golden afternoon",
+      "We were forever for a little while"
+    ],
+    "Mysterious": [
+      "A hidden door is breathing in the wall",
+      "The midnight keeps a secret in its sleeve",
+      "Footsteps disappear beneath the fog",
+      "I follow little sparks where shadows weave"
+    ],
+    "Playful": [
+      "My plans went left, my coffee went to space",
+      "The cat has filed a complaint against the moon",
+      "I brought a map; the map said good luck, pal",
+      "Today is just a blooper with a beat"
+    ],
+    "Dark": [
+      "The city wears a crown of broken glass",
+      "A quiet thunder gathers underneath my skin",
+      "I shake hands with the ghosts that know my name",
+      "The stars look down like witnesses tonight"
+    ],
+    "Peaceful": [
+      "The river takes the hurry from my mind",
+      "A slow breeze turns the leaves like pages",
+      "I let the silence settle in my chest",
+      "The world can wait beside this gentle light"
+    ],
+    "Rebellious": [
+      "I paint my own horizon on the wall",
+      "No borrowed crown can tell me who to be",
+      "We make a little noise and call it freedom",
+      "I choose the road that nobody designed"
+    ],
+    "Bittersweet": [
+      "We laughed so hard the tears became a song",
+      "Some endings leave a window open wide",
+      "I miss the days and love the way I grew",
+      "The sweetest things can sting a little too"
+    ]
+  },
+  "parodyLines": {
+    "Anime / fandom obsession": [
+      "One more episode, then sunrise (that is a lie)",
+      "My sleep schedule has entered a new arc",
+      "I came for one chapter, now birds are singing",
+      "The cliffhanger won; my alarm clock lost"
+    ],
+    "Everyday-life chaos": [
+      "My laundry pile just gained a final boss",
+      "I made a to-do list; it asked for a day off",
+      "The fridge light knows my midnight secrets",
+      "I lost my keys while holding them in my hand"
+    ],
+    "Internet meme energy": [
+      "The group chat says touch grass; I sent a meme",
+      "My last two brain cells are doing a dance",
+      "I went viral in a chat with three close friends",
+      "The algorithm knows my snack routine"
+    ],
+    "Romance satire": [
+      "You stole my hoodie and my streaming PIN",
+      "Our love language is what should we eat",
+      "You said be yourself; I sent twelve drafts",
+      "My heart said soulmate; my brain said terms apply"
+    ],
+    "Genre exaggeration": [
+      "One tiny feeling got a cinematic score",
+      "I stubbed my toe; the orchestra appeared",
+      "A dramatic wind machine followed me to work",
+      "My coffee has a character arc tonight"
+    ]
+  },
+  "multilingualFandom": {
+    "zh": [
+      "星光落在安静的海",
+      "把未说的话交给风来猜",
+      "就算世界慢慢变暗",
+      "心里的火依然不会熄散"
+    ],
+    "ko": [
+      "별빛 아래 내 꿈을 따라",
+      "긴 밤 끝에 다시 날아",
+      "작은 마음 모아 빛을 밝혀",
+      "오늘은 내가 나를 믿어"
+    ],
+    "ja": [
+      "夜の向こうに光を探す",
+      "小さな夢を胸に隠す",
+      "風に乗せた願いのかけら",
+      "明日へ続く僕らのうた"
+    ],
+    "hi": [
+      "ख्वाबों की राह में चलता रहूँ",
+      "अंधेरों में भी मैं जलता रहूँ",
+      "दिल की धड़कन कहती है आज",
+      "नई सुबह है मेरे पास"
+    ],
+    "es": [
+      "Bajo las luces vuelvo a soñar",
+      "Sigo las huellas que deja el mar",
+      "Aunque la noche quiera ganar",
+      "Tengo mil razones para cantar"
+    ],
+    "fr": [
+      "La nuit dessine un ciel doré",
+      "Mes rêves refusent de s'effacer",
+      "Même si le vent change de chemin",
+      "Je garde la lumière dans mes mains"
+    ],
+    "de": [
+      "Wir laufen weiter durch die Nacht",
+      "Ein neuer Morgen ist erwacht",
+      "Auch wenn der Himmel Wolken trägt",
+      "Bleibt unser Herz auf Freiheit geprägt"
+    ],
+    "pt": [
+      "No brilho da noite vou encontrar",
+      "Mil novos caminhos para caminhar",
+      "Se o vento mudar, eu vou seguir",
+      "Com tanta história pra descobrir"
+    ],
+    "ar": [
+      "في ضوء الليل أحلم من جديد",
+      "والقلب يمضي لا يريد الرحيل",
+      "مهما تطول الدروب أمامي",
+      "يبقى الأمل نور أيامي"
+    ],
+    "it": [
+      "Sotto la luna ritornerò",
+      "Tutte le stelle che seguirò",
+      "Anche se il vento mi porterà",
+      "La mia canzone mi guiderà"
+    ],
+    "ru": [
+      "Сквозь эту ночь я найду рассвет",
+      "В сердце храню негасимый свет",
+      "Пусть впереди неизвестный путь",
+      "Я не боюсь и продолжу идти"
+    ]
+  },
+  "arcs": {
+    "setup": [
+      "I turn {topic} into a story tonight",
+      "One small choice sets the whole thing in motion",
+      "I step inside before I know the rules"
+    ],
+    "rise": [
+      "Then every easy answer turns into a maze",
+      "Each wrong turn becomes another plot twist",
+      "I lose the map but keep the reason why"
+    ],
+    "bridge": [
+      "For one brief moment, even the stars go quiet",
+      "The truth arrives disguised as one more joke",
+      "I change the ending when the door is closed"
+    ],
+    "resolve": [
+      "Now every scattered piece is finding place",
+      "The next new chapter waits beyond the light",
+      "We turn the last page but keep the world alive"
+    ]
+  },
+  "rhymeSchemes": {
+    "Free verse": [],
+    "AABB": [
+      "I turn {topic} into a spark tonight",
+      "We chase that spark until it shines bright",
+      "Each little step becomes a brand-new start",
+      "We sing the next line straight from the heart"
+    ],
+    "ABAB": [
+      "I carry {topic} into the night",
+      "I find the nerve to begin again",
+      "We turn the shadows into light",
+      "And let the morning wash away the rain"
+    ]
+  },
+  "rhymeDictionary": {
+    "ight": [
+      "bright",
+      "flight",
+      "light",
+      "night",
+      "sight",
+      "might",
+      "right",
+      "write",
+      "fight",
+      "height",
+      "tonight",
+      "ignite",
+      "delight",
+      "midnight",
+      "starlight"
+    ],
+    "ay": [
+      "away",
+      "day",
+      "gray",
+      "play",
+      "say",
+      "stay",
+      "way",
+      "display",
+      "betray",
+      "decay",
+      "delay",
+      "array",
+      "today",
+      "okay",
+      "sway"
+    ],
+    "ame": [
+      "aim",
+      "blame",
+      "came",
+      "claim",
+      "flame",
+      "game",
+      "name",
+      "same",
+      "shame",
+      "frame",
+      "became",
+      "rename",
+      "tame",
+      "fame"
+    ],
+    "art": [
+      "art",
+      "cart",
+      "heart",
+      "part",
+      "start",
+      "smart",
+      "chart",
+      "depart",
+      "restart",
+      "apart",
+      "dart",
+      "impart"
+    ],
+    "air": [
+      "air",
+      "care",
+      "dare",
+      "fair",
+      "flare",
+      "glare",
+      "hair",
+      "pair",
+      "share",
+      "stare",
+      "there",
+      "where",
+      "aware",
+      "repair",
+      "compare"
+    ],
+    "ore": [
+      "adore",
+      "before",
+      "door",
+      "floor",
+      "more",
+      "shore",
+      "score",
+      "store",
+      "roar",
+      "explore",
+      "restore",
+      "ignore",
+      "encore",
+      "core"
+    ],
+    "own": [
+      "alone",
+      "known",
+      "grown",
+      "shown",
+      "throne",
+      "tone",
+      "stone",
+      "home",
+      "roam",
+      "chrome",
+      "overgrown",
+      "unknown"
+    ],
+    "ound": [
+      "around",
+      "bound",
+      "found",
+      "ground",
+      "sound",
+      "wound",
+      "crowned",
+      "down",
+      "town",
+      "renowned",
+      "profound",
+      "unbound"
+    ],
+    "ain": [
+      "again",
+      "brain",
+      "chain",
+      "crane",
+      "gain",
+      "lane",
+      "pain",
+      "rain",
+      "remain",
+      "train",
+      "plain",
+      "domain",
+      "explain",
+      "refrain"
+    ],
+    "ee": [
+      "be",
+      "free",
+      "key",
+      "me",
+      "sea",
+      "see",
+      "tree",
+      "three",
+      "we",
+      "agree",
+      "believe",
+      "release",
+      "beneath",
+      "dreamy"
+    ],
+    "ove": [
+      "above",
+      "glove",
+      "love",
+      "dove",
+      "shove",
+      "thereof",
+      "enough",
+      "rough",
+      "tough",
+      "stuff",
+      "of"
+    ],
+    "ell": [
+      "bell",
+      "fell",
+      "hell",
+      "sell",
+      "shell",
+      "smell",
+      "spell",
+      "swell",
+      "tell",
+      "well",
+      "compel",
+      "farewell",
+      "parallel"
+    ],
+    "end": [
+      "bend",
+      "blend",
+      "end",
+      "friend",
+      "lend",
+      "mend",
+      "send",
+      "spend",
+      "trend",
+      "weekend",
+      "defend",
+      "pretend",
+      "transcend"
+    ],
+    "old": [
+      "bold",
+      "cold",
+      "fold",
+      "gold",
+      "hold",
+      "old",
+      "sold",
+      "told",
+      "unfold",
+      "behold",
+      "threshold",
+      "controlled"
+    ],
+    "ing": [
+      "bring",
+      "cling",
+      "king",
+      "ring",
+      "sing",
+      "spring",
+      "swing",
+      "thing",
+      "wing",
+      "string",
+      "beginning",
+      "everything",
+      "awakening"
+    ],
+    "all": [
+      "all",
+      "call",
+      "fall",
+      "hall",
+      "small",
+      "wall",
+      "crawl",
+      "install",
+      "recall",
+      "overall",
+      "waterfall",
+      "freefall"
+    ],
+    "est": [
+      "best",
+      "chest",
+      "guest",
+      "jest",
+      "quest",
+      "rest",
+      "test",
+      "west",
+      "confessed",
+      "manifest",
+      "protest",
+      "request"
+    ],
+    "ime": [
+      "chime",
+      "climb",
+      "crime",
+      "dime",
+      "lifetime",
+      "rhyme",
+      "time",
+      "prime",
+      "slime",
+      "sublime",
+      "paradigm"
+    ],
+    "ide": [
+      "aside",
+      "bride",
+      "hide",
+      "ride",
+      "side",
+      "slide",
+      "stride",
+      "tide",
+      "wide",
+      "provide",
+      "inside",
+      "collide"
+    ],
+    "ack": [
+      "back",
+      "black",
+      "crack",
+      "track",
+      "stack",
+      "snack",
+      "pack",
+      "attack",
+      "comeback",
+      "flashback",
+      "unpack"
+    ],
+    "ush": [
+      "blush",
+      "brush",
+      "crush",
+      "flush",
+      "hush",
+      "rush",
+      "slush",
+      "trust",
+      "just",
+      "adjust",
+      "discuss"
+    ],
+    "ow": [
+      "allow",
+      "brow",
+      "how",
+      "now",
+      "plow",
+      "pow",
+      "vow",
+      "wow",
+      "somehow",
+      "endow"
+    ],
+    "ear": [
+      "appear",
+      "clear",
+      "dear",
+      "ear",
+      "fear",
+      "hear",
+      "near",
+      "year",
+      "sincere",
+      "disappear",
+      "frontier"
+    ],
+    "ate": [
+      "create",
+      "fate",
+      "gate",
+      "late",
+      "plate",
+      "state",
+      "wait",
+      "celebrate",
+      "elevate",
+      "translate",
+      "generate"
+    ],
+    "ore2": [
+      "shore",
+      "more",
+      "core",
+      "before",
+      "explore",
+      "restore",
+      "encore",
+      "roar",
+      "door",
+      "adore"
+    ]
+  }
+}
