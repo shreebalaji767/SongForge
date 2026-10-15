@@ -38,6 +38,8 @@ The offline composer uses original templates and language resources, so it is a 
 - Automatic draft recovery in the same browser
 - Keyboard shortcuts: `Ctrl/Cmd + S` to save and `Ctrl/Cmd + Enter` to generate
 - Local library, favorites, search, autosave, and JSON backup/restore
+- Copy a chorus or hook section by itself
+- Clean lyric whitespace and section spacing without changing lyric wording
 - TXT and Markdown export
 - Favorites-only library filter and one-click song duplication
 - Responsive interface with Unicode support
