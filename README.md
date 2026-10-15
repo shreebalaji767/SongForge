@@ -2,6 +2,22 @@
 
 A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
+## Python lyric engine (no AI)
+
+Python owns the deterministic lyric templates and can generate a complete draft locally. The build step writes those templates to `content/lyric_engine.json`; the static browser app uses that JSON to compose interactive lyrics without running a Python server.
+
+Generate lyrics locally from a terminal:
+
+```bash
+python lyric_engine.py --topic "neon city dreams" --mood Hopeful --genre Pop
+python lyric_engine.py --topic "anime marathon" --parody --seed 7 --output song.txt
+python lyric_engine.py --build-data --output content/lyric_engine.json
+python -m unittest discover -s tests -v
+python build.py
+```
+
+This is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
+
 ## Free and offline-friendly
 
 - No AI model, paid API, API key, subscription, or server required
@@ -13,7 +29,7 @@ A static, browser-based **lyrics-only** generator for original lyrics in one or 
 ## Principles
 
 - Static HTML, CSS, JavaScript, and JSON output
-- Python is used only at build time
+- Python is used for the local CLI generator, build-time lyric-data generation, and tests
 - No database, backend, or Python server
 - Browser `localStorage` for drafts, favorites, preferences, and library
 - Service worker caches the static app shell for offline reopening
