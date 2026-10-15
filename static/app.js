@@ -135,9 +135,9 @@ function ensureCoach(){
 }
 function updateCoach(){
  if(!$('lyrics'))return;
- const raw=$('lyrics').value||'',lines=raw.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean),body=lines.filter(x=>!/^\\[.*\\]$/.test(x)),norm=body.map(x=>x.toLocaleLowerCase().replace(/[^\\p{L}\\p{N}]+/gu,' ').trim()).filter(Boolean);
+ const raw=$('lyrics').value||'',lines=raw.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),body=lines.filter(x=>!/^\[.*\]$/.test(x)),norm=body.map(x=>x.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()).filter(Boolean);
  const seen=new Set(),dupes=[];norm.forEach((line,i)=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
- const headers=lines.filter(x=>/^\\[.*\\]$/.test(x)),hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
+ const headers=lines.filter(x=>/^\[.*\]$/.test(x)),hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
  let score=100,tips=[];
  if(body.length<8){score-=20;tips.push('Add more lyric lines to develop the idea.')}
  if(!hasHook){score-=12;tips.push('Add a [Chorus] or [Hook] section to give listeners an anchor.')}
@@ -145,7 +145,7 @@ function updateCoach(){
  if(headers.length<3){score-=10;tips.push('Try a clearer section arc: verse, hook, and bridge or outro.')}
  if(avg>0&&avg<4){score-=8;tips.push('Most lines are very short; try mixing short punches with longer phrases.')}
  if(avg>15){score-=8;tips.push('Several lines are long; split them to improve singability.')}
- const topic=(current&&current.topic||$('topic').value||'').toLocaleLowerCase().split(/[^\\p{L}\\p{N}]+/u).filter(w=>w.length>3);
+ const topic=(current&&current.topic||$('topic').value||'').toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(w=>w.length>3);
  const found=topic.filter(w=>raw.toLocaleLowerCase().includes(w));
  if(topic.length&&!found.length){score-=8;tips.push('The topic wording is hard to spot; add a concrete image or phrase from your prompt.')}
  if(!tips.length)tips.push('No obvious structure or repetition issues detected. Read aloud to check natural rhythm and meaning.');
