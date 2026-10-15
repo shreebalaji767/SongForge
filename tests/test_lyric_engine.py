@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from lyric_engine import build_static_data, generate_lyrics
+from lyric_engine import (\n    avoid_duplicate_lines, build_static_data, end_rhyme_pairs, generate_lyrics, rhyme_key,\n)
 
 
 class LyricEngineTests(unittest.TestCase):
@@ -35,6 +35,23 @@ class LyricEngineTests(unittest.TestCase):
         self.assertEqual(len(set(verse_one + verse_two)), 16)
         self.assertTrue(set(verse_one + verse_two).isdisjoint(chorus))
 
+    def test_rhyme_helpers_recognize_curated_end_rhymes(self):
+        self.assertEqual(rhyme_key("night"), rhyme_key("bright"))
+        self.assertEqual(rhyme_key("heart"), rhyme_key("start"))
+        self.assertTrue(end_rhyme_pairs([
+            "We walk into the night", "We turn the dark to light",
+            "A road becomes a start", "A song comes from the heart",
+        ]))
+
+    def test_duplicate_repair_keeps_section_labels_and_removes_accidental_repeats(self):
+        draft = "[Verse 1]\nA spark becomes a light\nA spark becomes a light\n\n[Chorus]\nA spark becomes a light\n\n[Outro]\nA spark becomes a light"
+        repaired = avoid_duplicate_lines(draft, seed=4)
+        self.assertEqual(repaired.count("[Verse 1]"), 1)
+        self.assertEqual(repaired.count("[Chorus]"), 1)
+        self.assertEqual(repaired.count("[Outro]"), 1)
+        lines = [line.strip().casefold() for line in repaired.splitlines() if line.strip() and not line.startswith("[")]
+        self.assertGreaterEqual(len(set(lines)), 2)
+
     def test_rhyme_scheme_inserts_requested_topic(self):
         lyrics = generate_lyrics("moonlit roads", rhyme_scheme="AABB", seed=5)
         self.assertIn("I turn moonlit roads into a spark tonight", lyrics)
@@ -54,7 +71,7 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
-            self.assertGreaterEqual(data["version"], 6)
+            self.assertGreaterEqual(data["version"], 7)
             for angle, lines in data["parodyLines"].items():
                 self.assertGreaterEqual(len(lines), 32, angle)
                 self.assertEqual(len(lines), len(set(lines)), angle)
