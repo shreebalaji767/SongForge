@@ -62,7 +62,7 @@ class LyricEngineTests(unittest.TestCase):
         self.assertIn("quiet orbit", lyrics)
 
         long_lyrics = generate_lyrics("quiet orbit", seed=11, verse_lines=99)
-        long_verse = long_lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        long_verse = long_lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0]
         self.assertEqual(len(long_verse.splitlines()), 8)
 
     def test_generated_engine_contains_every_browser_data_bank(self):
