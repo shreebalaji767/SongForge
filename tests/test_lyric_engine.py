@@ -77,6 +77,22 @@ class LyricEngineTests(unittest.TestCase):
             self.assertIsInstance(data.get(key), dict)
             self.assertTrue(data[key], key)
 
+
+    def test_cli_creates_missing_output_directories(self):
+        root = Path(__file__).resolve().parents[1]
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "nested" / "draft.txt"
+            subprocess.run(
+                [
+                    sys.executable, str(root / "lyric_engine.py"),
+                    "--topic", "quiet orbit", "--seed", "5",
+                    "--output", str(target),
+                ],
+                cwd=root, check=True, capture_output=True, text=True,
+            )
+            self.assertTrue(target.is_file())
+            self.assertIn("quiet orbit", target.read_text(encoding="utf-8"))
+
     def test_build_produces_complete_pages_artifact(self):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(
