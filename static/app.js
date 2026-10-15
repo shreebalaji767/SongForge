@@ -49,7 +49,7 @@ function getLib(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return
 function notify(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400)}
 function setSelect(id,arr){$(id).innerHTML=arr.map(x=>'<option value="'+safe(typeof x==='string'?x:x.id)+'">'+safe(typeof x==='string'?x:x.name)+'</option>').join('')}
 function selected(){if(document.querySelector('input[name=mode]:checked').value==='single')return[data.languages.find(x=>x.id===$('language').value)||data.languages[0]];return Array.from($('mixed').querySelectorAll('input:checked')).map(i=>data.languages.find(x=>x.id===i.value)).filter(Boolean)}
-function init(){fetch('./content/catalog.json').then(r=>{if(!r.ok)throw Error('catalog');return r.json()}).then(d=>{data=d;setSelect('genre',d.genres);setSelect('mood',d.moods);setSelect('language',d.languages);$('mixed').innerHTML=d.languages.map((l,i)=>'<label><input type="checkbox" value="'+safe(l.id)+'" '+(i<2?'checked':'')+'> '+safe(l.name)+'</label>').join('');$('mixed').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{if(!$('mixed').querySelector('input:checked'))i.checked=true;queueDraft()}));bind();restoreDraft();updateCount();renderLibrary()}).catch(()=>notify('Could not load the lyric catalog. Open the deployed site or build it first.'))}
+function init(){Promise.all([fetch('./content/catalog.json').then(r=>{if(!r.ok)throw Error('catalog');return r.json()}),fetch('./content/lyric_engine.json').then(r=>{if(!r.ok)throw Error('lyric engine');return r.json()})]).then(([catalog,lyricEngine])=>{data={...catalog,lyricEngine};setSelect('genre',data.genres);setSelect('mood',data.moods);setSelect('language',data.languages);$('mixed').innerHTML=data.languages.map((l,i)=>'<label><input type="checkbox" value="'+safe(l.id)+'" '+(i<2?'checked':'')+'> '+safe(l.name)+'</label>').join('');$('mixed').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{if(!$('mixed').querySelector('input:checked'))i.checked=true;queueDraft()}));bind();restoreDraft();updateCount();renderLibrary()}).catch(()=>notify('Could not load the lyric catalog or Python-generated lyric bank. Open the deployed site or run python build.py first.'))}
 function bind(){
  document.querySelectorAll('input[name=mode]').forEach(i=>i.addEventListener('change',()=>{const mix=document.querySelector('input[name=mode]:checked').value==='mixed';$('mixed').hidden=!mix;$('single').hidden=mix;queueDraft()}));
  ['topic','genre','mood','language','length','structure','parody','parodystyle'].forEach(id=>$(id).addEventListener('change',queueDraft));$('topic').addEventListener('input',queueDraft);
@@ -98,20 +98,15 @@ function generate(){
  }
  if($('length').value==='long'&&!sections.some(x=>/verse 3/i.test(x)))sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
  const topicPhrase=topic.replace(/[.!?]+$/,'').replace(/\s+/g,' ').toLowerCase();
- const hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=parodyLines[angle]||parodyLines['Anime / fandom obsession'];
- const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&multilingualFandom[hookLang.id]?multilingualFandom[hookLang.id].slice():[
+ const engine=data.lyricEngine,hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=engine.parodyLines[angle]||engine.parodyLines['Anime / fandom obsession'];
+ const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?multilingualFandom[hookLang.id].slice():[
   (hookLang.lines||data.languages[0].lines)[0],
   (hookLang.lines||data.languages[0].lines)[1],
   (hookLang.lines||data.languages[0].lines)[2],
   (hookLang.lines||data.languages[0].lines)[3]
  ];
- const arcs={
-  setup:['I turn '+topicPhrase+' into a story tonight','One small choice sets the whole thing in motion','I step inside before I know the rules'],
-  rise:['Then every easy answer turns into a maze','Each wrong turn becomes another plot twist','I lose the map but keep the reason why'],
-  bridge:['For one brief moment, even the stars go quiet','The truth arrives disguised as one more joke','I change the ending when the door is closed'],
-  resolve:['Now every scattered piece is finding place','The next new chapter waits beyond the light','We turn the last page but keep the world alive']
- };
- const out=[],used=new Set(),moodLines=phrases[mood]||phrases.Hopeful;
+ const arcs=engine.arcs;
+ const out=[],used=new Set(),moodLines=engine.phrases[mood]||phrases[mood]||phrases.Hopeful;
  function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));const pool=fresh.length?fresh:bank.map((v,i)=>({v,i}));const x=pool[Math.abs(seed+used.size*13)%pool.length];used.add(key+x.i);return x.v}
  sections.forEach((sec,i)=>{
   const isHook=/chorus|hook/i.test(sec),isBridge=/bridge/i.test(sec),isVerse=/verse/i.test(sec);
@@ -123,14 +118,14 @@ function generate(){
    if(lang.id==='en'){
     lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
     if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
-   }else if(angle==='Anime / fandom obsession'&&multilingualFandom[lang.id]){
+   }else if(angle==='Anime / fandom obsession'&&engine.multilingualFandom[lang.id]){
     lines=[pickFresh(multilingualFandom[lang.id],'localized'+lang.id),pickFresh(multilingualFandom[lang.id],'localized'+lang.id)];
    }else{
     lines=[pickFresh(bank,'parody'+lang.id),pickFresh(bank,'parody'+lang.id)];
    }
   }else if(lang.id==='en'){
    const beat=isBridge?'bridge':i===0?'setup':isVerse?'rise':'resolve';
-   lines=[pickFresh(arcs[beat],'arc'+beat),pickFresh(moodLines,'mood'+mood)];
+   lines=[pickFresh(arcs[beat],'arc'+beat).replace('{topic}',topicPhrase),pickFresh(moodLines,'mood'+mood)];
    if(genre==='Rap'||genre==='Hip-Hop'||genre==='Trap')lines=lines.map(line=>line+' — '+pickFresh(['every setback turns to fuel','I write my truth across the beat','no borrowed crown, I make my lane'],'rap'));
    if(genre==='Metal'||genre==='Rock')lines=lines.map(line=>line.replace(/light|morning|quiet/gi,'fire'));
   }else lines=[pickFresh(bank,'lang'+lang.id),pickFresh(bank,'lang'+lang.id)];
