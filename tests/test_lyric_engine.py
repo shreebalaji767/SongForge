@@ -30,8 +30,8 @@ class LyricEngineTests(unittest.TestCase):
 
     def test_verse_line_count_is_configurable(self):
         lyrics = generate_lyrics("midnight trains", seed=4, verse_lines=6)
-        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
-        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\\n\\n[Outro]", 1)[0]
+        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0]
+        verse_two = lyrics.split("[Verse 2]\n", 1)[1].split("\n\n[Outro]", 1)[0]
         self.assertEqual(len(verse_one.splitlines()), 6)
         self.assertEqual(len(verse_two.splitlines()), 6)
 
