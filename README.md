@@ -63,7 +63,8 @@ The offline composer uses original templates and language resources, so it is a 
 
 ## Features
 
-- Engine v7: dictionary-backed rhyme-family detection and stronger AABB/ABAB chorus endings
+- Engine v8: dictionary-backed rhyme-family detection, stronger AABB/ABAB endings, and structured Mandarin parody song forms
+- Section-aware songwriting forms for Mandarin romance satire, with spoken intro, rhythmic verses, rising pre-chorus, choir call-and-response hooks, emotional bridge, final hook variation, and comic outro
 - Duplicate repair pass replaces accidental repeated lines while preserving intentional hook repeats
 - Browser generation performs a final cross-section duplicate check using local language-specific banks
 - Lyric Coach rhyme scan now checks curated dictionary families before falling back to suffix heuristics
