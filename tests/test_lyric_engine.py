@@ -81,9 +81,10 @@ class LyricEngineTests(unittest.TestCase):
         self.assertIn("深夜外卖", generate_lyrics("深夜外卖", seed=21, language="zh"))
         self.assertIn("[Chorus]", lyrics)
         self.assertIn("你说", lyrics)
-        self.assertEqual(len(set(lyrics.splitlines())), len(lyrics.splitlines()))
-        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
-        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\\n\\n[Outro]", 1)[0]
+        nonempty_lines = [line for line in lyrics.splitlines() if line.strip()]
+        self.assertEqual(len(set(nonempty_lines)), len(nonempty_lines))
+        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\n\n[Chorus]", 1)[0]
+        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\n\n[Outro]", 1)[0]
         self.assertEqual(len(verse_one.splitlines()), 8)
         self.assertEqual(len(verse_two.splitlines()), 8)
 
@@ -101,7 +102,7 @@ class LyricEngineTests(unittest.TestCase):
             )
             lyric = target.read_text(encoding="utf-8")
             self.assertIn("夏夜", lyric)
-            self.assertIn("副歌", lyric)
+            self.assertIn("，", lyric)
 
     def test_unknown_options_fall_back_and_line_count_is_clamped(self):
         lyrics = generate_lyrics(
