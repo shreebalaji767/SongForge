@@ -9,14 +9,14 @@ Python owns the deterministic lyric templates and can generate a complete draft 
 Generate lyrics locally from a terminal:
 
 ```bash
-python lyric_engine.py --topic "neon city dreams" --mood Hopeful --genre Pop
+python lyric_engine.py --topic "neon city dreams" --mood Hopeful --genre Pop --rhyme-scheme AABB
 python lyric_engine.py --topic "anime marathon" --parody --seed 7 --output song.txt
 python lyric_engine.py --build-data --output content/lyric_engine.json
 python -m unittest discover -s tests -v
 python build.py
 ```
 
-This is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
+The browser studio also includes a **Rhyme pattern** selector: Free verse, AABB (paired rhymes), and ABAB (alternating rhymes). These offline patterns are applied to the English hook; other languages keep their own localized hook templates. The Python CLI accepts the same `--rhyme-scheme` option.\n\nThis is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
 
 ## Free and offline-friendly
 
