@@ -7,43 +7,6 @@ const structures={
  rap:['[Intro]','[Verse 1]','[Hook]','[Verse 2]','[Hook]','[Outro]'],
  short:['[Verse]','[Chorus]','[Outro]']
 };
-const phrases={
- Hopeful:['I turn the page and let the morning in','A thousand small beginnings start to shine','The road is long, but I can learn to fly','I plant a little courage in the light'],
- Heartbroken:['Your echo lingers in the quiet room','I keep our old September in a song','The space you left is louder than the rain','I fold the memories and carry on'],
- Dreamy:['The moon is painting silver on the street','We drift like paper planets through the blue','A secret constellation calls my name','The night is soft enough to hold a dream'],
- Energetic:['We hit the ground like thunder in the night','No slowing down until the skyline glows','Turn every doubt into a battle cry','Our restless hearts are racing with the drums'],
- Melancholic:['The evening leaves its blue upon my hands','Some goodbyes take the long way home','I hear the rain replaying yesterday','A faded photograph still knows my name'],
- Romantic:['Your laughter makes a sunrise of the room','Two shadows dancing underneath the stars','I find my home in every word you say','The whole wide world gets quiet next to you'],
- Angry:['I will not wear the chains you made for me','Let every locked door hear me break the silence','I turn the pressure into gasoline','You wrote the rules, now watch me rewrite them'],
- Triumphant:['I climbed the walls that fear built in my way','The finish line is only one more start','Let every scar become a banner in the sky','I earned this sunrise one step at a time'],
- Nostalgic:['Old summer streets still know the sound of us','A paper note can time-travel through the years','The radio brings back that golden afternoon','We were forever for a little while'],
- Mysterious:['A hidden door is breathing in the wall','The midnight keeps a secret in its sleeve','Footsteps disappear beneath the fog','I follow little sparks where shadows weave'],
- Playful:['My plans went left, my coffee went to space','The cat has filed a complaint against the moon','I brought a map; the map said “good luck, pal”','Today is just a blooper with a beat'],
- Dark:['The city wears a crown of broken glass','A quiet thunder gathers underneath my skin','I shake hands with the ghosts that know my name','The stars look down like witnesses tonight'],
- Peaceful:['The river takes the hurry from my mind','A slow breeze turns the leaves like pages','I let the silence settle in my chest','The world can wait beside this gentle light'],
- Rebellious:['I paint my own horizon on the wall','No borrowed crown can tell me who to be','We make a little noise and call it freedom','I choose the road that nobody designed'],
- Bittersweet:['We laughed so hard the tears became a song','Some endings leave a window open wide','I miss the days and love the way I grew','The sweetest things can sting a little too']
-};
-const parodyLines={
- 'Anime / fandom obsession':['One more episode, then sunrise (that is a lie)','My sleep schedule has entered a new arc','I came for one chapter, now birds are singing','The cliffhanger won; my alarm clock lost'],
- 'Everyday-life chaos':['My laundry pile just gained a final boss','I made a to-do list; it asked for a day off','The fridge light knows my midnight secrets','I lost my keys while holding them in my hand'],
- 'Internet meme energy':['The group chat says “touch grass”; I sent a meme','My last two brain cells are doing a dance','I went viral in a chat with three close friends','The algorithm knows my snack routine'],
- 'Romance satire':['You stole my hoodie and my streaming PIN','Our love language is “what should we eat?”','You said “be yourself”; I sent twelve drafts','My heart said soulmate; my brain said “terms apply”'],
- 'Genre exaggeration':['One tiny feeling got a cinematic score','I stubbed my toe; the orchestra appeared','A dramatic wind machine followed me to work','My coffee has a character arc tonight']
-};
-const multilingualFandom={
- zh:['再看一集，天亮也没关系','我的睡眠时间开启了新篇章','只读一章，窗外鸟儿已经开唱','剧情反转赢了，闹钟彻底投降'],
- ko:['한 편만 더, 해가 떠도 괜찮아','내 수면 시간표도 새 시즌 시작','한 화만 봤는데 새들이 노래해','반전은 이겼고 알람은 졌어'],
- ja:['あと一話だけ、朝でもかまわない','睡眠時間にも新章が始まった','一話だけのはずが鳥まで歌ってる','伏線回収に勝てず目覚ましは敗北'],
- hi:['बस एक एपिसोड और, सुबह हो तो होने दो','मेरी नींद ने भी नया आर्क शुरू कर दिया','एक चैप्टर पढ़ा, अब चिड़ियाँ गा रही हैं','क्लिफहैंगर जीता, अलार्म हार गया'],
- es:['Un episodio más, que amanezca si quiere','Mi horario de sueño estrena otro arco','Vine por un capítulo y cantan los pájaros','Ganó el giro de trama, perdió mi alarma'],
- fr:['Encore un épisode, que le soleil attende','Mon sommeil entame un nouvel arc narratif','Un chapitre de plus, les oiseaux chantent déjà','Le suspense a gagné, mon réveil a perdu'],
- de:['Noch eine Folge, der Morgen kann warten','Mein Schlafrhythmus startet einen neuen Handlungsbogen','Ein Kapitel nur, jetzt singen schon die Vögel','Der Cliffhanger gewann, mein Wecker verlor'],
- pt:['Só mais um episódio, que espere o amanhecer','Meu sono começou um novo arco','Vim por um capítulo e os pássaros já cantam','O suspense venceu, meu despertador perdeu'],
- ar:['حلقة أخرى فقط، فلتنتظر الشمس قليلاً','جدول نومي بدأ موسماً جديداً','جئت لفصل واحد والطيور بدأت الغناء','فاز التشويق وخسر المنبّه'],
- it:['Ancora un episodio, l’alba può aspettare','Il mio sonno inizia un nuovo arco narrativo','Un capitolo soltanto, e gli uccelli già cantano','Ha vinto il colpo di scena, ha perso la sveglia'],
- ru:['Ещё одна серия — рассвет подождёт','Мой режим сна открыл новую сюжетную арку','Зашёл на главу, а птицы уже поют','Клиффхэнгер победил, будильник проиграл']
-};
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function getLib(){try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
 function notify(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400)}
@@ -106,7 +69,7 @@ function generate(){
   (hookLang.lines||data.languages[0].lines)[3]
  ];
  const arcs=engine.arcs;
- const out=[],used=new Set(),moodLines=engine.phrases[mood]||phrases[mood]||phrases.Hopeful;
+ const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
  function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));const pool=fresh.length?fresh:bank.map((v,i)=>({v,i}));const x=pool[Math.abs(seed+used.size*13)%pool.length];used.add(key+x.i);return x.v}
  sections.forEach((sec,i)=>{
   const isHook=/chorus|hook/i.test(sec),isBridge=/bridge/i.test(sec),isVerse=/verse/i.test(sec);
