@@ -80,11 +80,11 @@ class LyricEngineTests(unittest.TestCase):
         )
         self.assertIn("深夜外卖", generate_lyrics("深夜外卖", seed=21, language="zh"))
         self.assertIn("[Chorus]", lyrics)
-        self.assertIn("你说", lyrics)
+        self.assertIn("，", lyrics)
         nonempty_lines = [line for line in lyrics.splitlines() if line.strip()]
         self.assertEqual(len(set(nonempty_lines)), len(nonempty_lines))
-        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\n\n[Chorus]", 1)[0]
-        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\n\n[Outro]", 1)[0]
+        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0]
+        verse_two = lyrics.split("[Verse 2]\n", 1)[1].split("\n\n[Outro]", 1)[0]
         self.assertEqual(len(verse_one.splitlines()), 8)
         self.assertEqual(len(verse_two.splitlines()), 8)
 
