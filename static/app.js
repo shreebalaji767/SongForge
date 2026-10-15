@@ -99,7 +99,7 @@ function generate(){
  if($('length').value==='long'&&!sections.some(x=>/verse 3/i.test(x)))sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
  const topicPhrase=topic.replace(/[.!?]+$/,'').replace(/\s+/g,' ').toLowerCase();
  const engine=data.lyricEngine,hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=engine.parodyLines[angle]||engine.parodyLines['Anime / fandom obsession'];
- const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?multilingualFandom[hookLang.id].slice():[
+ const hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?engine.multilingualFandom[hookLang.id].slice():[
   (hookLang.lines||data.languages[0].lines)[0],
   (hookLang.lines||data.languages[0].lines)[1],
   (hookLang.lines||data.languages[0].lines)[2],
@@ -119,7 +119,7 @@ function generate(){
     lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
     if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
    }else if(angle==='Anime / fandom obsession'&&engine.multilingualFandom[lang.id]){
-    lines=[pickFresh(multilingualFandom[lang.id],'localized'+lang.id),pickFresh(multilingualFandom[lang.id],'localized'+lang.id)];
+    lines=[pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id),pickFresh(multilingualFandom[lang.id],'localized'+lang.id)];
    }else{
     lines=[pickFresh(bank,'parody'+lang.id),pickFresh(bank,'parody'+lang.id)];
    }
