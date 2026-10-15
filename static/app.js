@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='songforge.library.v1',DRAFT='songforge.draft.v2',THEME='songforge.light';
-let data={},current=null,toastTimer,draftTimer,deferredInstallPrompt=null;
+let data={},current=null,toastTimer,draftTimer,deferredInstallPrompt=null,historyTimer,lyricHistory=[],lyricHistoryIndex=-1;
 const structures={
  standard:['[Verse 1]','[Chorus]','[Verse 2]','[Bridge]','[Final Chorus]','[Outro]'],
  pop:['[Verse 1]','[Pre-Chorus]','[Chorus]','[Verse 2]','[Chorus]','[Bridge]','[Final Chorus]'],
@@ -42,8 +42,9 @@ function bind(){
  $('generate').onclick=generate;$('remix').onclick=generate;
  $('new').onclick=()=>{if(current&&!confirm('Start a new lyric draft? Your saved songs stay in the library.'))return;current=null;$('editor').hidden=true;$('empty').hidden=false;$('heading').textContent='Your blank canvas';$('save').textContent='♡ Save';clearDraft();};
  $('save').onclick=save;
- $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueDraft()}});
+ $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueLyricHistory($('lyrics').value);queueDraft()}});
  $('title').addEventListener('input',()=>{if(current){current.title=$('title').value;$('heading').textContent=$('title').value||'Untitled Song';queueDraft()}});
+ $('undoLyrics').onclick=()=>moveLyricHistory(-1);$('redoLyrics').onclick=()=>moveLyricHistory(1);
  $('copy').onclick=()=>copy($('lyrics').value);
  $('copyHook').onclick=()=>{
   const lines=$('lyrics').value.split(/\r?\n/);let active=false,found=false,out=[];
@@ -140,7 +141,7 @@ function generate(){
  current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,rhymeScheme:$('rhymeScheme').value,verseLines:Number($('verseLines').value)||4,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
  showEditor();queueDraft();notify('Lyrics generated locally with your selected rhyme pattern.');
 }
-function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save';updateCoach()}
+function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;resetLyricHistory(current.lyrics);$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save';updateCoach()}
 function ensureCoach(){
  let panel=$('lyricCoach');if(panel)return panel;
  panel=document.createElement('section');panel.id='lyricCoach';panel.className='lyric-coach';panel.setAttribute('aria-live','polite');
@@ -204,6 +205,11 @@ function syllableCount(line){
  },0);
 }
 function songText(){return($('title').value.trim()||'Untitled Song')+'\n\n'+$('lyrics').value}
+function resetLyricHistory(value){clearTimeout(historyTimer);lyricHistory=[String(value??'')];lyricHistoryIndex=0;updateHistoryButtons()}
+function commitLyricHistory(value){value=String(value??'');if(lyricHistory[lyricHistoryIndex]===value)return;lyricHistory=lyricHistory.slice(0,lyricHistoryIndex+1);lyricHistory.push(value);if(lyricHistory.length>100)lyricHistory.shift();lyricHistoryIndex=lyricHistory.length-1;updateHistoryButtons()}
+function queueLyricHistory(value){clearTimeout(historyTimer);historyTimer=setTimeout(()=>commitLyricHistory(value),500)}
+function updateHistoryButtons(){const undo=$('undoLyrics'),redo=$('redoLyrics');if(!undo||!redo)return;undo.disabled=lyricHistoryIndex<=0;redo.disabled=lyricHistoryIndex<0||lyricHistoryIndex>=lyricHistory.length-1}
+function moveLyricHistory(step){clearTimeout(historyTimer);const value=$('lyrics').value;if(value!==lyricHistory[lyricHistoryIndex])commitLyricHistory(value);const next=lyricHistoryIndex+step;if(next<0||next>=lyricHistory.length){updateHistoryButtons();return}lyricHistoryIndex=next;$('lyrics').value=lyricHistory[lyricHistoryIndex];if(current)current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();updateHistoryButtons();queueDraft()}
 function save(){
  if(!current){notify('Generate lyrics first.');return}
  current.title=$('title').value.trim()||'Untitled Song';current.lyrics=$('lyrics').value;current.updatedAt=new Date().toISOString();
