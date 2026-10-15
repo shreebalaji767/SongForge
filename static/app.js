@@ -140,6 +140,12 @@ function updateCoach(){
  const body=entries.map(x=>x.line),norm=entries.filter(x=>!/chorus|hook/i.test(x.section)).map(x=>x.line.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim()).filter(Boolean);
  const seen=new Set(),dupes=[];norm.forEach(line=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
  const hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
+ const english=current&&Array.isArray(current.languageIds)?current.languageIds.includes('en'):true;
+ const verseLines=entries.filter(x=>!/chorus|hook/i.test(x.section)).map(x=>x.line);
+ const rhymeGroups={};if(english)verseLines.forEach(line=>{const words=line.toLowerCase().match(/[a-z]+/g)||[];if(!words.length)return;const word=words[words.length-1],key=rhymeKey(word);if(key)(rhymeGroups[key]||(rhymeGroups[key]=[])).push(word)});
+ const rhymePairs=Object.entries(rhymeGroups).filter(([,words])=>new Set(words).size>1);
+ const syllables=english?verseLines.map(syllableCount).filter(n=>n>0):[];
+ const syllableRange=syllables.length?Math.max(...syllables)-Math.min(...syllables):0;
  let score=100,tips=[];
  if(body.length<8){score-=20;tips.push('Add more lyric lines to develop the idea.')}
  if(!hasHook){score-=12;tips.push('Add a [Chorus] or [Hook] section to give listeners an anchor.')}
@@ -159,9 +165,31 @@ function updateCoach(){
  head.append(title,grade);panel.append(head);
  const stats=document.createElement('p');stats.className='coach-stats';stats.textContent=headers.length+' sections · '+body.length+' lyric lines · '+dupes.length+' repeated line'+(dupes.length===1?'':'s')+' · '+Math.round(avg)+' words/line';panel.append(stats);
  const list=document.createElement('ul');tips.forEach(t=>{const li=document.createElement('li');li.textContent=t;list.append(li)});panel.append(list);
- const note=document.createElement('small');note.textContent='Heuristic checks only—not a judgment of artistic quality or translation accuracy.';panel.append(note);
+ const flow=document.createElement('p');flow.className='coach-stats';
+ if(english){
+  const rhymeText=rhymePairs.length?rhymePairs.slice(0,3).map(([key,words])=>key+': '+Array.from(new Set(words)).slice(0,4).join(' / ')).join(' · '):'No clear end-rhyme groups detected yet.';
+  flow.textContent='Rhyme scan: '+rhymePairs.length+' possible rhyme group'+(rhymePairs.length===1?'':'s')+' · estimated syllables/line: '+(syllables.length?Math.round(syllables.reduce((a,b)=>a+b,0)/syllables.length):0)+' average · '+(syllableRange>7?'wide syllable spread—try reading lines aloud':'syllable spread looks manageable')+'. '+rhymeText;
+ }else flow.textContent='Rhyme scan is available for English lines; read other languages aloud to check their natural rhythm.';
+ panel.append(flow);
+ const note=document.createElement('small');note.textContent='Heuristic checks only—not a judgment of artistic quality, rhyme accuracy, or translation quality.';panel.append(note);
 }
 function countWords(s){return(s.match(/[\p{L}\p{N}]+/gu)||[]).length}
+function rhymeKey(word){
+ const w=(word||'').toLocaleLowerCase().replace(/[^a-z]/g,'');
+ if(w.length<3)return '';
+ const endings=['ation','ition','ight','ound','ough','eart','air','are','ore','ower','ower','ame','ance','ence','ound','ound','ound','ain','ake','ate','ell','est','end','old','ost','ing','ong','uck','ush','ide','ove','ime','all','own','ay','ee','ow','oo','ue','ear','ire','ore','art','ent','ill','ink','ash','ack','ump'];
+ const ending=endings.sort((a,b)=>b.length-a.length).find(x=>w.endsWith(x));
+ return ending||w.slice(-3);
+}
+function syllableCount(line){
+ const words=(line.toLowerCase().match(/[a-z]+/g)||[]);
+ return words.reduce((sum,word)=>{
+  if(word.length<=3)return sum+1;
+  let w=word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
+  const groups=w.match(/[aeiouy]+/g);
+  return sum+Math.max(1,groups?groups.length:1);
+ },0);
+}
 function songText(){return($('title').value.trim()||'Untitled Song')+'\n\n'+$('lyrics').value}
 function save(){
  if(!current){notify('Generate lyrics first.');return}
