@@ -69,7 +69,7 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
         bank = PARODY["Anime / fandom obsession"]
         lines = rng.sample(bank, k=len(bank))
     else:
-        lines = [rng.choice(ARCS["setup"]).format(topic=topic), rng.choice(mood_lines),
+        lines = [ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines),
                  rng.choice(ARCS["rise"]), rng.choice(mood_lines),
                  rng.choice(ARCS["bridge"]), rng.choice(mood_lines),
                  rng.choice(ARCS["resolve"]), rng.choice(mood_lines)]
