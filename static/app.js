@@ -148,7 +148,7 @@ function generate(){
    if(genre==='Metal'||genre==='Rock')lines=lines.map(line=>line.replace(/light|morning|quiet/gi,'fire'));
   }else if(lang.id==='zh'&&localizedPhrases.zh){
    const zhBank=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful||bank;
-   const zhTopic=/[\\u4e00-\\u9fff]/.test(topic)?topic:'今晚的心事';
+   const zhTopic=/[\u4e00-\u9fff]/.test(topic)?topic:'今晚的心事';
    const topicLines=['今晚这首歌，就唱给'+zhTopic+'听','把'+zhTopic+'写进今晚的副歌','关于'+zhTopic+'，我还有话没说完'];
    if(['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh){lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(localizedRap.zh,'localizedRapzh')];}
    else{lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(zhBank,'localizedPhraseszh'+mood)];}
