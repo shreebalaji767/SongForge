@@ -1,5 +1,5 @@
-const CACHE='songforge-shell-v3';
-const SHELL=['./','./index.html','./static/style.css','./static/app.js','./manifest.webmanifest','./static/icon.svg','./content/catalog.json','./content/lyric_engine.json'];
+const CACHE='songforge-shell-v4';
+const SHELL=['./','./index.html','./static/style.css','./static/app.js','./manifest.webmanifest','./static/icon.svg','./static/logo.svg','./static/favicon.svg','./content/catalog.json','./content/lyric_engine.json'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
 });
