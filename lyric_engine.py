@@ -691,7 +691,7 @@ def avoid_duplicate_lines(lyrics: str, language: str = "en", seed: int | None = 
     rng = random.Random(seed)
     fallback = list(dict.fromkeys(_quality_fallbacks(language)))
     rng.shuffle(fallback)
-    used: set[str] = set()
+    used: dict[str, str] = {}
     section = ""
     output: list[str] = []
     for line in lyrics.splitlines():
@@ -703,8 +703,11 @@ def avoid_duplicate_lines(lyrics: str, language: str = "en", seed: int | None = 
             output.append(line)
             continue
         key = normalize_lyric_line(line)
-        intentional_hook = "chorus" in section or "hook" in section
-        if key and key in used and not intentional_hook:
+        previous_section = used.get(key, "")
+        current_hook = "chorus" in section or "hook" in section
+        previous_hook = "chorus" in previous_section or "hook" in previous_section
+        intentional_hook_repeat = current_hook and previous_hook
+        if key and previous_section and not intentional_hook_repeat:
             replacement = next(
                 (candidate for candidate in fallback
                  if normalize_lyric_line(candidate) not in used
@@ -715,7 +718,7 @@ def avoid_duplicate_lines(lyrics: str, language: str = "en", seed: int | None = 
                 line = replacement
                 key = normalize_lyric_line(line)
         if key:
-            used.add(key)
+            used.setdefault(key, section)
         output.append(line)
     return "\n".join(output)
 
