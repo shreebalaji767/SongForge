@@ -68,7 +68,8 @@ The offline composer uses original templates and language resources, so it is a 
 - Keyboard shortcuts: `Ctrl/Cmd + S` to save and `Ctrl/Cmd + Enter` to generate
 - Local library, favorites, search, autosave, and JSON backup/restore
 - Copy a chorus or hook section by itself
-- Undo and redo recent lyric edits in the current editing session\n- Clean lyric whitespace and section spacing without changing lyric wording
+- Undo and redo recent lyric edits in the current editing session
+- Clean lyric whitespace and section spacing without changing lyric wording
 - TXT and Markdown export
 - Favorites-only library filter and one-click song duplication
 - Responsive interface with Unicode support
