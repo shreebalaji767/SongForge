@@ -5,7 +5,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from lyric_engine import (\n    avoid_duplicate_lines, build_static_data, end_rhyme_pairs, generate_lyrics, rhyme_key,\n)
+from lyric_engine import (
+    avoid_duplicate_lines, build_static_data, end_rhyme_pairs, generate_lyrics, rhyme_key,
+)
 
 
 class LyricEngineTests(unittest.TestCase):
