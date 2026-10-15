@@ -627,7 +627,75 @@ RHYME_SCHEMES = {
   "And let a brand-new day begin"
  ]
 }
-ENGINE = {"version":7,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
+ZH_PARODY_FORMS = {
+ "Romance satire": {
+  "Intro": [
+   "你已读不回，我把三种结局写进备忘录",
+   "恋爱还没开始，我先把风险评估做足",
+   "心说冲吧，脑子说先看用户协议",
+   "（一本正经）请阅读恋爱须知，再决定要不要牵手。"
+  ],
+  "Verse 1": [
+   "你掉根薯条在床上，我说这事得开庭",
+   "爱情还没到终点，先来一场财产纠纷",
+   "给你写首情歌，输入法劝我分手",
+   "连手机都看不下去，问我图你什么理由",
+   "我的情书有修订版，还有最终最终版",
+   "每次说句我想你，都要排练好几遍",
+   "你说爱就别想太多，跟着感觉走",
+   "我的心需要验证码，输错三次就锁喉"
+  ],
+  "Pre-Chorus": [
+   "你发一个爱心，我开始研究心理",
+   "你少打两个哈哈，我怀疑感情过期",
+   "闺蜜群里紧急开会，专家各有各的理",
+   "（合唱：一致通过！）我是真的没救了你！"
+  ],
+  "Chorus": [
+   "你穿走我的外套，还盗用我的会员！",
+   "（合唱：这算不算违约！）",
+   "每次约会第一题：今天到底吃哪边？",
+   "（合唱：选不出来！选不出来！）",
+   "你说做自己，我写了十二个版本！",
+   "（合唱：再改一轮！再改一轮！）",
+   "我的心说是命中注定——",
+   "我的脑说：请勾选同意再亲！"
+  ],
+  "Verse 2": [
+   "你知道我喝几分糖，也知道密码提示",
+   "这叫灵魂伴侣，还是网络安全事故？",
+   "你说随便找家店，我说好，那你决定",
+   "你说都可以以后，我们又走了三公里",
+   "我的爱没有条件，除了我的那份炸鸡",
+   "谁动我最后一块，谁就别怪我讲道理",
+   "你晚安后面加句号，我盯着屏幕发愁",
+   "这个点到底是句号，还是感情到尽头？"
+  ],
+  "Bridge": [
+   "其实我不要你，事事都给答案",
+   "也不需要每句晚安，都附数据分析报告单",
+   "我只想你累了的时候，愿意靠在我肩膀",
+   "还有吃最后一口之前——记得问我一声行不行！"
+  ],
+  "Final Chorus": [
+   "你穿走我的外套，还盗用我的会员！",
+   "（合唱：爱就爱！别违约！）",
+   "每次约会第一题：今天到底吃哪边？",
+   "（合唱：吃什么！吃什么！）",
+   "你说做自己，我终于不写第十三版！",
+   "（合唱：批准了！批准了！）",
+   "我的心说此生认定——",
+   "我的脑说：算了，直接亲！"
+  ],
+  "Outro": [
+   "我给你发了三分钟语音，附赠导演解说。",
+   "你回了两个字：哈哈。",
+   "（停顿）我的 Excel……它自己变红了。"
+  ]
+ }
+}
+
+ENGINE = {"version":8,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY}
 
 
 
@@ -734,6 +802,30 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
     mood_lines = PHRASES.get(mood, PHRASES["Hopeful"])
 
     if language == "zh":
+        if parody and parody_angle in ZH_PARODY_FORMS:
+            form = ZH_PARODY_FORMS[parody_angle]
+            verse_one = form["Verse 1"][:]
+            verse_two = form["Verse 2"][:]
+            chorus = form["Chorus"][:]
+            intro = form["Intro"][:]
+            pre_chorus = form["Pre-Chorus"][:]
+            bridge = form["Bridge"][:]
+            final_chorus = form["Final Chorus"][:]
+            outro = form["Outro"][:]
+            if verse_lines < 8:
+                verse_one = verse_one[:max(2, verse_lines)]
+                verse_two = verse_two[:max(2, verse_lines)]
+            lyrics = (
+                "[Intro — 说唱口白｜慵懒、戏剧化]\n" + "\n".join(intro)
+                + "\n\n[Verse 1 — 轻快说唱｜俏皮切分]\n" + "\n".join(verse_one)
+                + "\n\n[Pre-Chorus — 旋律渐起]\n" + "\n".join(pre_chorus)
+                + "\n\n[Chorus — 流行大副歌＋福音合唱]\n" + "\n".join(chorus)
+                + "\n\n[Verse 2 — 加速说唱｜密集押韵]\n" + "\n".join(verse_two)
+                + "\n\n[Bridge — 钢琴＋温柔合唱｜真心话]\n" + "\n".join(bridge)
+                + "\n\n[Final Chorus — 爆发式流行副歌＋全员合唱]\n" + "\n".join(final_chorus)
+                + "\n\n[Outro — 伴奏骤停｜一本正经]\n" + "\n".join(outro)
+            )
+            return lyrics
         zh_topic = topic if re.search(r"[\u4e00-\u9fff]", topic) else "今晚的心事"
         zh_moods = LOCALIZED_PHRASES["zh"]
         zh_lines = zh_moods.get(mood, zh_moods["Hopeful"])
