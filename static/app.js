@@ -65,14 +65,14 @@ function bind(){
  };
  $('download').onclick=()=>download(songText(),slug($('title').value||'song')+'.txt','text/plain;charset=utf-8');
  $('exportMd').onclick=()=>download('# '+($('title').value.trim()||'Untitled Song')+'\n\n'+$('lyrics').value,slug($('title').value||'song')+'.md','text/markdown;charset=utf-8');
- $('theme').onclick=()=>{document.body.classList.toggle('light');localStorage.setItem(THEME,document.body.classList.contains('light')?'1':'0')};
+ $('theme').onclick=()=>{document.body.classList.toggle('light');try{localStorage.setItem(THEME,document.body.classList.contains('light')?'1':'0')}catch(e){notify('Theme changed for this session; browser storage is unavailable.')}};
  document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('topic').value=b.dataset.prompt;generate()});
  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset.view));
  $('search').oninput=renderLibrary;$('filterFavorites').onchange=renderLibrary;
  $('backup').onclick=()=>download(JSON.stringify({format:'songforge-backup',version:2,songs:getLib()},null,2),'songforge-backup.json','application/json');
  $('restore').onclick=()=>$('file').click();$('file').onchange=restore;
  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();save()}if((e.ctrlKey||e.metaKey)&&e.key==='Enter'&&$('studio').hidden===false){e.preventDefault();generate()}});
- if(localStorage.getItem(THEME)==='1')document.body.classList.add('light');
+ try{if(localStorage.getItem(THEME)==='1')document.body.classList.add('light')}catch(e){/* Keep the default theme when browser storage is blocked. */}
 }
 function findRhymes(){
  const input=$('rhymeWord'),out=$('rhymeResults'),word=(input.value||'').toLocaleLowerCase().trim().replace(/[^a-z'-]/g,'');
