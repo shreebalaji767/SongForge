@@ -48,7 +48,7 @@ function bind(){
  $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueLyricHistory($('lyrics').value);queueDraft()}});
  $('title').addEventListener('input',()=>{if(current){current.title=$('title').value;$('heading').textContent=$('title').value||'Untitled Song';queueDraft()}});
  $('undoLyrics').onclick=()=>moveLyricHistory(-1);$('redoLyrics').onclick=()=>moveLyricHistory(1);
- $('findRhymes').onclick=findRhymes;$('rhymeWord').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();findRhymes()}});setupInstallPrompt();
+ $('findRhymes').onclick=findRhymes;$('rhymeWord').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();findRhymes()}});
  $('copy').onclick=()=>copy($('lyrics').value);
  $('copyHook').onclick=()=>{
   const lines=$('lyrics').value.split(/\r?\n/);let active=false,found=false,out=[];
@@ -245,6 +245,7 @@ function slug(s){return(s||'song').toLowerCase().normalize('NFKD').replace(/[^\p
 function download(text,name,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function copy(text){try{await navigator.clipboard.writeText(text);notify('Lyrics copied')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.append(ta);ta.select();const ok=document.execCommand('copy');ta.remove();notify(ok?'Lyrics copied':'Copy failed — select and copy the lyrics manually')}}
 function restore(e){const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){notify('Backup is too large (maximum 5 MB).');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result),arr=Array.isArray(parsed)?parsed:parsed.songs;if(!Array.isArray(arr))throw Error('shape');const incoming=arr.map((s,i)=>normalizeSong(s,'restored-'+Date.now()+'-'+i)).filter(Boolean);if(!incoming.length)throw Error('empty');const map=new Map(getLib().map(s=>[s.id,s]));incoming.forEach(s=>map.set(s.id,s));localStorage.setItem(KEY,JSON.stringify(Array.from(map.values())));updateCount();renderLibrary();notify('Backup restored: '+incoming.length+' song'+(incoming.length===1?'':'s'))}catch(e){notify('Invalid backup or browser storage is full. No songs were imported.')}finally{e.target.value=''}};reader.onerror=()=>{notify('Could not read the selected backup file.');e.target.value=''};reader.readAsText(f)}
+setupInstallPrompt();
 init();
 if('serviceWorker' in navigator && location.protocol!=='file:'){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
