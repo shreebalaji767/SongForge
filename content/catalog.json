@@ -1,0 +1,167 @@
+{
+  "genres": [
+    "Pop",
+    "Hip-Hop",
+    "Rap",
+    "Trap",
+    "Rock",
+    "Metal",
+    "EDM",
+    "Synthwave",
+    "R&B",
+    "Soul",
+    "Jazz",
+    "Blues",
+    "Folk",
+    "Country",
+    "Indie",
+    "Lo-fi",
+    "Ballad",
+    "Cinematic",
+    "K-pop",
+    "J-pop",
+    "C-pop",
+    "Reggae",
+    "Punk",
+    "Comedy"
+  ],
+  "moods": [
+    "Hopeful",
+    "Heartbroken",
+    "Dreamy",
+    "Energetic",
+    "Melancholic",
+    "Romantic",
+    "Angry",
+    "Triumphant",
+    "Nostalgic",
+    "Mysterious",
+    "Playful",
+    "Dark",
+    "Peaceful",
+    "Rebellious",
+    "Bittersweet"
+  ],
+  "languages": [
+    {
+      "id": "en",
+      "name": "English",
+      "lines": [
+        "I chase the dawn beyond the city lights",
+        "A little hope can turn the dark to gold",
+        "Every broken road can lead me home",
+        "Tonight my heart is brave enough to fly"
+      ]
+    },
+    {
+      "id": "zh",
+      "name": "Chinese (中文)",
+      "lines": [
+        "星光落在安静的海",
+        "把未说的话交给风来猜",
+        "就算世界慢慢变暗",
+        "心里的火依然不会熄散"
+      ]
+    },
+    {
+      "id": "ko",
+      "name": "Korean (한국어)",
+      "lines": [
+        "별빛 아래 내 꿈을 따라",
+        "긴 밤 끝에 다시 날아",
+        "작은 마음 모아 빛을 밝혀",
+        "오늘은 내가 나를 믿어"
+      ]
+    },
+    {
+      "id": "ja",
+      "name": "Japanese (日本語)",
+      "lines": [
+        "夜の向こうに光を探す",
+        "小さな夢を胸に隠す",
+        "風に乗せた願いのかけら",
+        "明日へ続く僕らのうた"
+      ]
+    },
+    {
+      "id": "hi",
+      "name": "Hindi (हिन्दी)",
+      "lines": [
+        "ख्वाबों की राह में चलता रहूँ",
+        "अंधेरों में भी मैं जलता रहूँ",
+        "दिल की धड़कन कहती है आज",
+        "नई सुबह है मेरे पास"
+      ]
+    },
+    {
+      "id": "es",
+      "name": "Spanish (Español)",
+      "lines": [
+        "Bajo las luces vuelvo a soñar",
+        "Sigo las huellas que deja el mar",
+        "Aunque la noche quiera ganar",
+        "Tengo mil razones para cantar"
+      ]
+    },
+    {
+      "id": "fr",
+      "name": "French (Français)",
+      "lines": [
+        "La nuit dessine un ciel doré",
+        "Mes rêves refusent de s'effacer",
+        "Même si le vent change de chemin",
+        "Je garde la lumière dans mes mains"
+      ]
+    },
+    {
+      "id": "de",
+      "name": "German (Deutsch)",
+      "lines": [
+        "Wir laufen weiter durch die Nacht",
+        "Ein neuer Morgen ist erwacht",
+        "Auch wenn der Himmel Wolken trägt",
+        "Bleibt unser Herz auf Freiheit geprägt"
+      ]
+    },
+    {
+      "id": "pt",
+      "name": "Portuguese (Português)",
+      "lines": [
+        "No brilho da noite vou encontrar",
+        "Mil novos caminhos para caminhar",
+        "Se o vento mudar, eu vou seguir",
+        "Com tanta história pra descobrir"
+      ]
+    },
+    {
+      "id": "ar",
+      "name": "Arabic (العربية)",
+      "lines": [
+        "في ضوء الليل أحلم من جديد",
+        "والقلب يمضي لا يريد الرحيل",
+        "مهما تطول الدروب أمامي",
+        "يبقى الأمل نور أيامي"
+      ]
+    },
+    {
+      "id": "it",
+      "name": "Italian (Italiano)",
+      "lines": [
+        "Sotto la luna ritornerò",
+        "Tutte le stelle che seguirò",
+        "Anche se il vento mi porterà",
+        "La mia canzone mi guiderà"
+      ]
+    },
+    {
+      "id": "ru",
+      "name": "Russian (Русский)",
+      "lines": [
+        "Сквозь эту ночь я найду рассвет",
+        "В сердце храню негасимый свет",
+        "Пусть впереди неизвестный путь",
+        "Я не боюсь и продолжу идти"
+      ]
+    }
+  ]
+}
