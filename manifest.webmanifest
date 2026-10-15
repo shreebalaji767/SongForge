@@ -1,0 +1,13 @@
+{
+  "name": "SongForge — Multilingual Lyrics Lab",
+  "short_name": "SongForge",
+  "description": "Free, offline-friendly multilingual lyrics generator and editor.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e0b16",
+  "theme_color": "#100d1b",
+  "icons": [
+    { "src": "./static/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
