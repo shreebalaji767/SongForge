@@ -658,7 +658,7 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
             chorus_lines = rng.sample(zh_lines, k=2)
             if genre.lower() in {"rap", "hip-hop", "trap", "嘻哈", "说唱"}:
                 rap = LOCALIZED_RAP["zh"]
-                verse1 = [rng.choice(rap), rng.choice(zh_lines)]
+                verse1 = [f"这一段，就从{zh_topic}唱起", rng.choice(rap)]
                 verse2 = [rng.choice(rap), rng.choice(zh_lines)]
                 chorus_lines = rng.sample(rap, k=2)
         while len(verse1) < verse_lines:
