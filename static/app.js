@@ -56,7 +56,7 @@ function bind(){
  $('generate').onclick=generate;$('remix').onclick=generate;
  $('new').onclick=()=>{if(current&&!confirm('Start a new lyric draft? Your saved songs stay in the library.'))return;current=null;$('editor').hidden=true;$('empty').hidden=false;$('heading').textContent='Your blank canvas';$('save').textContent='♡ Save';clearDraft();};
  $('save').onclick=save;
- $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';queueDraft()}});
+ $('lyrics').addEventListener('input',()=>{if(current){current.lyrics=$('lyrics').value;$('words').textContent=countWords($('lyrics').value)+' words · Unsaved changes';updateCoach();queueDraft()}});
  $('title').addEventListener('input',()=>{if(current){current.title=$('title').value;$('heading').textContent=$('title').value||'Untitled Song';queueDraft()}});
  $('copy').onclick=()=>copy($('lyrics').value);
  $('download').onclick=()=>download(songText(),slug($('title').value||'song')+'.txt','text/plain;charset=utf-8');
@@ -127,7 +127,38 @@ function generate(){
  current={id:(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+'-'+seed,title:topicTitle(topic,seed)+(parody?' (Parody)':''),lyrics,topic,genre,mood,languages:langs.map(l=>l.name),languageIds:langs.map(l=>l.id),languageMode:document.querySelector('input[name=mode]:checked').value,length:$('length').value,structure:$('structure').value,parody,parodyAngle:angle,createdAt:new Date().toISOString(),favorite:false};
  showEditor();queueDraft();notify('Lyrics generated with a consistent repeating hook and connected verse progression.');
 }
-function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save'}
+function showEditor(){ $('empty').hidden=true;$('editor').hidden=false;$('heading').textContent=current.title;$('title').value=current.title;$('lyrics').value=current.lyrics;$('tags').innerHTML=[current.genre].concat(current.languages||[],[current.mood],current.parody?['Parody']:[]).map(t=>'<span>'+safe(t)+'</span>').join('');$('words').textContent=countWords(current.lyrics)+' words';$('save').textContent=getLib().some(s=>s.id===current.id)?'♥ Saved':'♡ Save';updateCoach()}
+function ensureCoach(){
+ let panel=$('lyricCoach');if(panel)return panel;
+ panel=document.createElement('section');panel.id='lyricCoach';panel.className='lyric-coach';panel.setAttribute('aria-live','polite');
+ const lyrics=$('lyrics');lyrics.insertAdjacentElement('afterend',panel);return panel;
+}
+function updateCoach(){
+ if(!$('lyrics'))return;
+ const raw=$('lyrics').value||'',lines=raw.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean),body=lines.filter(x=>!/^\\[.*\\]$/.test(x)),norm=body.map(x=>x.toLocaleLowerCase().replace(/[^\\p{L}\\p{N}]+/gu,' ').trim()).filter(Boolean);
+ const seen=new Set(),dupes=[];norm.forEach((line,i)=>{if(seen.has(line)&&!dupes.includes(line))dupes.push(line);seen.add(line)});
+ const headers=lines.filter(x=>/^\\[.*\\]$/.test(x)),hasHook=headers.some(x=>/chorus|hook/i.test(x)),avg=body.length?body.reduce((n,x)=>n+countWords(x),0)/body.length:0;
+ let score=100,tips=[];
+ if(body.length<8){score-=20;tips.push('Add more lyric lines to develop the idea.')}
+ if(!hasHook){score-=12;tips.push('Add a [Chorus] or [Hook] section to give listeners an anchor.')}
+ if(dupes.length){score-=Math.min(30,dupes.length*15);tips.push('Review repeated lines outside an intentional chorus: '+dupes.slice(0,2).join(' / ')+'.')}
+ if(headers.length<3){score-=10;tips.push('Try a clearer section arc: verse, hook, and bridge or outro.')}
+ if(avg>0&&avg<4){score-=8;tips.push('Most lines are very short; try mixing short punches with longer phrases.')}
+ if(avg>15){score-=8;tips.push('Several lines are long; split them to improve singability.')}
+ const topic=(current&&current.topic||$('topic').value||'').toLocaleLowerCase().split(/[^\\p{L}\\p{N}]+/u).filter(w=>w.length>3);
+ const found=topic.filter(w=>raw.toLocaleLowerCase().includes(w));
+ if(topic.length&&!found.length){score-=8;tips.push('The topic wording is hard to spot; add a concrete image or phrase from your prompt.')}
+ if(!tips.length)tips.push('No obvious structure or repetition issues detected. Read aloud to check natural rhythm and meaning.');
+ score=Math.max(0,Math.min(100,score));
+ const panel=ensureCoach();panel.replaceChildren();
+ const head=document.createElement('div');head.className='coach-head';
+ const title=document.createElement('strong');title.textContent='Lyric Coach · Draft checks';
+ const grade=document.createElement('span');grade.className='coach-score';grade.textContent=score+'/100';
+ head.append(title,grade);panel.append(head);
+ const stats=document.createElement('p');stats.className='coach-stats';stats.textContent=headers.length+' sections · '+body.length+' lyric lines · '+dupes.length+' repeated line'+(dupes.length===1?'':'s')+' · '+Math.round(avg)+' words/line';panel.append(stats);
+ const list=document.createElement('ul');tips.forEach(t=>{const li=document.createElement('li');li.textContent=t;list.append(li)});panel.append(list);
+ const note=document.createElement('small');note.textContent='Heuristic checks only—not a judgment of artistic quality or translation accuracy.';panel.append(note);
+}
 function countWords(s){return(s.match(/[\p{L}\p{N}]+/gu)||[]).length}
 function songText(){return($('title').value.trim()||'Untitled Song')+'\n\n'+$('lyrics').value}
 function save(){
