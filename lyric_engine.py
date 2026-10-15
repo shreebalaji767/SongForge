@@ -487,6 +487,8 @@ if __name__ == "__main__":
     else:
         lyric = generate_lyrics(args.topic, args.mood, args.genre, args.parody, args.seed, args.rhyme_scheme, args.verse_lines)
         if args.output:
-            Path(args.output).write_text(lyric + "\n", encoding="utf-8")
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(lyric + "\n", encoding="utf-8")
         else:
             print(lyric)
