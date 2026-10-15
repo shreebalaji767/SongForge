@@ -28,6 +28,13 @@ class LyricEngineTests(unittest.TestCase):
         self.assertIn("I turn moonlit roads into a spark tonight", lyrics)
         self.assertIn("We chase that spark until it shines bright", lyrics)
 
+    def test_verse_line_count_is_configurable(self):
+        lyrics = generate_lyrics("midnight trains", seed=4, verse_lines=6)
+        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        verse_two = lyrics.split("[Verse 2]\\n", 1)[1].split("\\n\\n[Outro]", 1)[0]
+        self.assertEqual(len(verse_one.splitlines()), 6)
+        self.assertEqual(len(verse_two.splitlines()), 6)
+
     def test_build_writes_static_json_bank(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "lyric_engine.json"
@@ -39,6 +46,8 @@ class LyricEngineTests(unittest.TestCase):
             self.assertIn("rhymeSchemes", data)
             self.assertIn("AABB", data["rhymeSchemes"])
             self.assertIn("ABAB", data["rhymeSchemes"])
+            self.assertIn("rhymeDictionary", data)
+            self.assertGreaterEqual(len(data["rhymeDictionary"]), 20)
 
 
 if __name__ == "__main__":
