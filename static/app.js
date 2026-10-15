@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='songforge.library.v1',DRAFT='songforge.draft.v2',THEME='songforge.light';
-let data={},current=null,toastTimer,draftTimer;
+let data={},current=null,toastTimer,draftTimer,deferredInstallPrompt=null;
 const structures={
  standard:['[Verse 1]','[Chorus]','[Verse 2]','[Bridge]','[Final Chorus]','[Outro]'],
  pop:['[Verse 1]','[Pre-Chorus]','[Chorus]','[Verse 2]','[Chorus]','[Bridge]','[Final Chorus]'],
@@ -13,6 +13,29 @@ function notify(s){$('toast').textContent=s;$('toast').classList.add('show');cle
 function setSelect(id,arr){$(id).innerHTML=arr.map(x=>'<option value="'+safe(typeof x==='string'?x:x.id)+'">'+safe(typeof x==='string'?x:x.name)+'</option>').join('')}
 function selected(){if(document.querySelector('input[name=mode]:checked').value==='single')return[data.languages.find(x=>x.id===$('language').value)||data.languages[0]];return Array.from($('mixed').querySelectorAll('input:checked')).map(i=>data.languages.find(x=>x.id===i.value)).filter(Boolean)}
 function init(){Promise.all([fetch('./content/catalog.json').then(r=>{if(!r.ok)throw Error('catalog');return r.json()}),fetch('./content/lyric_engine.json').then(r=>{if(!r.ok)throw Error('lyric engine');return r.json()})]).then(([catalog,lyricEngine])=>{data={...catalog,lyricEngine};setSelect('genre',data.genres);setSelect('mood',data.moods);setSelect('language',data.languages);$('mixed').innerHTML=data.languages.map((l,i)=>'<label><input type="checkbox" value="'+safe(l.id)+'" '+(i<2?'checked':'')+'> '+safe(l.name)+'</label>').join('');$('mixed').querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{if(!$('mixed').querySelector('input:checked'))i.checked=true;queueDraft()}));bind();restoreDraft();updateCount();renderLibrary()}).catch(()=>notify('Could not load the lyric catalog or Python-generated lyric bank. Open the deployed site or run python build.py first.'))}
+function setupInstallPrompt(){
+ const button=$('installPwa');if(!button)return;
+ const standalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ const refresh=()=>{button.textContent=standalone()?'✓ App Installed':'⇩ Install App';button.setAttribute('aria-label',standalone()?'SongForge is installed':'Install SongForge app')};
+ refresh();
+ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstallPrompt=event;button.classList.add('install-ready');button.textContent='⇩ Install App'});
+ window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;refresh();notify('SongForge installed successfully.')});
+ button.addEventListener('click',async()=>{
+  if(standalone()){notify('SongForge is already installed.');return}
+  if(deferredInstallPrompt){
+   deferredInstallPrompt.prompt();
+   const choice=await deferredInstallPrompt.userChoice;
+   deferredInstallPrompt=null;
+   if(choice&&choice.outcome==='accepted')notify('SongForge installation accepted.');
+   else notify('Installation was cancelled. You can install it later.');
+   return;
+  }
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(ios)notify('To install: tap Share, then “Add to Home Screen”.');
+  else if(!window.isSecureContext)notify('Install requires HTTPS. Open the GitHub Pages HTTPS website.');
+  else notify('If your browser supports installation, use its menu and choose “Install app” or “Add to Home screen”.');
+ });
+}
 function bind(){
  document.querySelectorAll('input[name=mode]').forEach(i=>i.addEventListener('change',()=>{const mix=document.querySelector('input[name=mode]:checked').value==='mixed';$('mixed').hidden=!mix;$('single').hidden=mix;queueDraft()}));
  ['topic','genre','mood','language','length','structure','parody','parodystyle'].forEach(id=>$(id).addEventListener('change',queueDraft));$('topic').addEventListener('input',queueDraft);
