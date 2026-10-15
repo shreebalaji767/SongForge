@@ -9,3 +9,13 @@
 #topic{line-height:1.6}
 #lyrics{tab-size:2}
 @media(max-width:680px){.librarytools{grid-template-columns:1fr}.actions button{flex:1}.actions span{width:100%;margin:0 0 5px}}
+
+/* Live lyric quality checks */
+.lyric-coach{margin:14px 0 8px;padding:16px;border:1px solid var(--line,rgba(255,255,255,.14));border-radius:14px;background:var(--panel-soft,rgba(255,255,255,.035))}
+.coach-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.coach-head strong{font-size:.95rem}
+.coach-score{font:600 1rem "DM Mono",monospace;color:var(--accent,#b9a0ff)}
+.coach-stats{margin:8px 0;font-size:.82rem;opacity:.78}
+.lyric-coach ul{margin:10px 0;padding-left:20px}
+.lyric-coach li{margin:5px 0;font-size:.86rem;line-height:1.45}
+.lyric-coach small{display:block;margin-top:10px;font-size:.75rem;line-height:1.45;opacity:.68}
