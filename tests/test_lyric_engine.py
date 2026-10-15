@@ -57,7 +57,7 @@ class LyricEngineTests(unittest.TestCase):
             "quiet orbit", mood="Not a real mood", rhyme_scheme="unknown",
             seed=11, verse_lines=1,
         )
-        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        verse_one = lyrics.split("[Verse 1]\n", 1)[1].split("\n\n[Chorus]", 1)[0]
         self.assertEqual(len(verse_one.splitlines()), 2)
         self.assertIn("quiet orbit", lyrics)
 
@@ -81,8 +81,9 @@ class LyricEngineTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(
             [sys.executable, str(root / "build.py")],
-            cwd=root, check=True, capture_output=True, text=True,
+            cwd=root, check=False, capture_output=True, text=True,
         )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("local HTML/JS references", result.stdout)
         for relative in (
             "index.html", "static/app.js", "static/style.css",
