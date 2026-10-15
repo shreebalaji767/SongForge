@@ -457,9 +457,11 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
     mood_lines = PHRASES.get(mood, PHRASES["Hopeful"])
     if parody:
         bank = list(PARODY["Anime / fandom obsession"])
-        verse1 = rng.sample(bank, k=2)
-        verse2 = ["The next episode can wait (it cannot)", "My calendar is now a filler arc"]
         chorus_lines = [bank[2], bank[3], "One more page becomes a whole new season", "My alarm clock deserves a redemption arc"]
+        available = [line for line in bank if line not in chorus_lines]
+        verse1 = rng.sample(available, k=verse_lines)
+        remaining = [line for line in available if line not in verse1]
+        verse2 = rng.sample(remaining, k=verse_lines)
     else:
         verse1 = [ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines)]
         verse2 = [rng.choice(ARCS["rise"]), rng.choice(mood_lines)]
