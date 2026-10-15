@@ -117,7 +117,7 @@ function generate(){
  const arcs=engine.arcs;
  const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
  if(parody&&hookLang.id==='en')jokes.slice(0,4).forEach((_,index)=>used.add('joke'+index));
- function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));const pool=fresh.length?fresh:bank.map((v,i)=>({v,i}));const x=pool[Math.abs(seed+used.size*13)%pool.length];used.add(key+x.i);return x.v}
+ function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));if(!fresh.length){const unusedText=bank.filter(v=>!out.includes(v));if(!unusedText.length)return bank[Math.abs(seed+used.size*13)%bank.length];const value=unusedText[Math.abs(seed+used.size*13)%unusedText.length];used.add(key+'text:'+value);return value}const x=fresh[Math.abs(seed+used.size*13)%fresh.length];used.add(key+x.i);return x.v}
  sections.forEach((sec,i)=>{
   const isHook=/chorus|hook/i.test(sec),isBridge=/bridge/i.test(sec),isVerse=/verse/i.test(sec);
   const lang=isHook?hookLang:langs[i%langs.length],bank=lang.lines||data.languages[0].lines;
