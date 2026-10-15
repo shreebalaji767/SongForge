@@ -111,3 +111,7 @@ button{min-height:38px}
 .rhyme-chips{display:flex;flex-wrap:wrap;gap:5px}
 .rhyme-chip{min-height:29px;padding:5px 8px;border-radius:99px;font-size:11px;background:#b89aff12;border-color:#b89aff44}
 @media(max-width:520px){.rhyme-finder{padding:10px}.rhyme-chip{padding:6px 8px}}
+
+/* Undo/redo controls remain visibly disabled until an edit can be reversed. */
+.actions button:disabled{opacity:.4;cursor:not-allowed;border-color:var(--line)}
+.actions button:focus-visible,.panel button:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
