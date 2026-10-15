@@ -37,6 +37,23 @@ class LyricEngineTests(unittest.TestCase):
         self.assertEqual(len(set(verse_one + verse_two)), 16)
         self.assertTrue(set(verse_one + verse_two).isdisjoint(chorus))
 
+    def test_mandarin_romance_parody_has_full_song_arc_and_choir_hook(self):
+        lyrics = generate_lyrics(
+            "恋爱说明书", language="zh", parody=True,
+            parody_angle="Romance satire", genre="Pop", seed=21,
+        )
+        for section in (
+            "[Intro — 说唱口白", "[Verse 1 — 轻快说唱", "[Pre-Chorus",
+            "[Chorus — 流行大副歌", "[Verse 2 — 加速说唱",
+            "[Bridge — 钢琴", "[Final Chorus", "[Outro — 伴奏骤停",
+        ):
+            self.assertIn(section, lyrics)
+        self.assertIn("（合唱：这算不算违约！）", lyrics)
+        self.assertIn("其实我不要你，事事都给答案", lyrics)
+        self.assertIn("我的 Excel……它自己变红了。", lyrics)
+        verse_one = lyrics.split("[Verse 1 — 轻快说唱｜俏皮切分]\n", 1)[1].split("\n\n[Pre-Chorus", 1)[0]
+        self.assertEqual(len(verse_one.splitlines()), 8)
+
     def test_rhyme_helpers_recognize_curated_end_rhymes(self):
         self.assertEqual(rhyme_key("night"), rhyme_key("bright"))
         self.assertEqual(rhyme_key("heart"), rhyme_key("start"))
@@ -82,7 +99,7 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
-            self.assertGreaterEqual(data["version"], 7)
+            self.assertGreaterEqual(data["version"], 8)
             for angle, lines in data["parodyLines"].items():
                 self.assertGreaterEqual(len(lines), 32, angle)
                 self.assertEqual(len(lines), len(set(lines)), angle)
