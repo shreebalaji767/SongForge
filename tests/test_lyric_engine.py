@@ -54,6 +54,15 @@ class LyricEngineTests(unittest.TestCase):
         lines = [line.strip().casefold() for line in repaired.splitlines() if line.strip() and not line.startswith("[")]
         self.assertGreaterEqual(len(set(lines)), 2)
 
+    def test_standard_generation_repairs_duplicate_lines(self):
+        lyrics = generate_lyrics("city lights", mood="Hopeful", seed=19, verse_lines=8)
+        body = [
+            line.strip().casefold()
+            for line in lyrics.splitlines()
+            if line.strip() and not line.startswith("[")
+        ]
+        self.assertEqual(len(body), len(set(body)))
+
     def test_rhyme_scheme_inserts_requested_topic(self):
         lyrics = generate_lyrics("moonlit roads", rhyme_scheme="AABB", seed=5)
         self.assertIn("I turn moonlit roads into a spark tonight", lyrics)
