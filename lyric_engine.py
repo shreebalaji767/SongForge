@@ -78,19 +78,34 @@ def build_static_data(destination: Path) -> None:
 def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None, rhyme_scheme: str="Free verse") -> str:
     """Generate a complete short lyric draft locally using Python templates."""
     rng = random.Random(seed)
-    topic = re.sub(r"\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
+    topic = re.sub(r"\\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
     mood_lines = PHRASES.get(mood, PHRASES["Hopeful"])
     if parody:
-        bank = PARODY["Anime / fandom obsession"]
-        lines = rng.sample(bank, k=len(bank))
+        lines = rng.sample(PARODY["Anime / fandom obsession"], k=4) + [
+            "The next episode can wait (it cannot)",
+            "My calendar is now a filler arc",
+            "One more page becomes a whole new season",
+            "My alarm clock deserves a redemption arc",
+        ]
+        chorus_lines = lines[2:4]
     else:
-        lines = [ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines),
-                 rng.choice(ARCS["rise"]), rng.choice(mood_lines),
-                 rng.choice(ARCS["bridge"]), rng.choice(mood_lines),
-                 rng.choice(ARCS["resolve"]), rng.choice(mood_lines)]
+        lines = [
+            ARCS["setup"][0].format(topic=topic), rng.choice(mood_lines),
+            rng.choice(ARCS["rise"]), rng.choice(mood_lines),
+            rng.choice(ARCS["bridge"]), rng.choice(mood_lines),
+            rng.choice(ARCS["resolve"]), rng.choice(mood_lines),
+        ]
+        chorus_lines = lines[2:4]
+        if rhyme_scheme in RHYME_SCHEMES and RHYME_SCHEMES[rhyme_scheme]:
+            chorus_lines = [line.format(topic=topic) for line in RHYME_SCHEMES[rhyme_scheme]]
     if genre.lower() in {"rap", "hip-hop", "trap"} and not parody:
         lines = [line + " — I write my truth across the beat" for line in lines]
-    return "[Verse 1]\n" + "\n".join(lines[:2]) + "\n\n[Chorus]\n" + "\n".join(lines[2:4]) + "\n\n[Verse 2]\n" + "\n".join(lines[4:6]) + "\n\n[Outro]\n" + "\n".join(lines[6:8])
+    return (
+        "[Verse 1]\\n" + "\\n".join(lines[:2])
+        + "\\n\\n[Chorus]\\n" + "\\n".join(chorus_lines)
+        + "\\n\\n[Verse 2]\\n" + "\\n".join(lines[4:6])
+        + "\\n\\n[Outro]\\n" + "\\n".join(lines[6:8])
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate original template-based SongForge lyrics locally.")
@@ -98,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--mood", default="Hopeful", choices=sorted(PHRASES))
     parser.add_argument("--genre", default="Pop")
     parser.add_argument("--parody", action="store_true")
+    parser.add_argument("--rhyme-scheme", choices=sorted(RHYME_SCHEMES), default="Free verse", help="Optional offline chorus rhyme pattern")
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--build-data", action="store_true", help="Write the static JSON bank used by the website")
     parser.add_argument("--output", default=None, help="Optional path for generated lyric text")
