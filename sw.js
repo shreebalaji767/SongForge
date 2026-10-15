@@ -1,4 +1,4 @@
-const CACHE='songforge-shell-v1';
+const CACHE='songforge-shell-v2';
 const SHELL=['./','./index.html','./static/style.css','./static/app.js','./manifest.webmanifest','./static/icon.svg'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
