@@ -97,3 +97,17 @@ button{min-height:38px}
 }
 @media(hover:none){button{touch-action:manipulation}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+
+/* Offline rhyme finder controls */
+.rhyme-finder{margin:13px 0 4px;padding:12px;border:1px solid var(--line);border-radius:11px;background:#100d1880}
+.rhyme-finder>label{margin-top:0!important}
+.rhyme-search{display:flex;gap:7px;align-items:stretch}
+.rhyme-search input{width:100%;min-width:0;background:#100d18;border:1px solid var(--line);border-radius:8px;color:var(--text);padding:10px;outline:none}
+.rhyme-search input:focus{border-color:var(--purple)}
+.rhyme-search button{flex:0 0 auto}
+.rhyme-results{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+.rhyme-family{display:block;margin-bottom:7px;color:var(--purple);font:10px 'DM Mono',monospace}
+.rhyme-chips{display:flex;flex-wrap:wrap;gap:5px}
+.rhyme-chip{min-height:29px;padding:5px 8px;border-radius:99px;font-size:11px;background:#b89aff12;border-color:#b89aff44}
+@media(max-width:520px){.rhyme-finder{padding:10px}.rhyme-chip{padding:6px 8px}}
