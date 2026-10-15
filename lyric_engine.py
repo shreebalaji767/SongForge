@@ -636,12 +636,12 @@ def build_static_data(destination: Path) -> None:
 def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: bool=False, seed: int|None=None, rhyme_scheme: str="Free verse", verse_lines: int=4, language: str="en", parody_angle: str="Anime / fandom obsession") -> str:
     """Generate a complete lyric draft locally; zh uses curated native-Mandarin banks."""
     rng = random.Random(seed)
-    topic = re.sub(r"\\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
+    topic = re.sub(r"\s+", " ", topic.strip()).rstrip(".!?") or "following a dream through the night"
     verse_lines = max(2, min(8, int(verse_lines)))
     mood_lines = PHRASES.get(mood, PHRASES["Hopeful"])
 
     if language == "zh":
-        zh_topic = topic if re.search(r"[\\u4e00-\\u9fff]", topic) else "今晚的心事"
+        zh_topic = topic if re.search(r"[\u4e00-\u9fff]", topic) else "今晚的心事"
         zh_moods = LOCALIZED_PHRASES["zh"]
         zh_lines = zh_moods.get(mood, zh_moods["Hopeful"])
         if parody:
@@ -694,10 +694,10 @@ def generate_lyrics(topic: str, mood: str="Hopeful", genre: str="Pop", parody: b
             verse2 = [line + " — I write my truth across the beat" for line in verse2]
 
     return (
-        "[Verse 1]\\n" + "\\n".join(verse1[:verse_lines])
-        + "\\n\\n[Chorus]\\n" + "\\n".join(chorus_lines)
-        + "\\n\\n[Verse 2]\\n" + "\\n".join(verse2[:verse_lines])
-        + "\\n\\n[Outro]\\n" + "\\n".join(outro_lines)
+        "[Verse 1]\\n" + "\n".join(verse1[:verse_lines])
+        + "\\n\\n[Chorus]\\n" + "\n".join(chorus_lines)
+        + "\\n\\n[Verse 2]\\n" + "\n".join(verse2[:verse_lines])
+        + "\\n\\n[Outro]\\n" + "\n".join(outro_lines)
     )
 
 if __name__ == "__main__":
