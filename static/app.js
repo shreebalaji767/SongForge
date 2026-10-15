@@ -105,7 +105,7 @@ function generate(){
  if($('length').value==='long'&&!sections.some(x=>/verse 3/i.test(x)))sections.splice(Math.max(2,sections.length-1),0,'[Verse 3]');
  const topicPhrase=topic.replace(/[.!?]+$/,'').replace(/\s+/g,' ').toLowerCase();
  const engine=data.lyricEngine,hookLang=langs.find(l=>l.id==='en')||langs[0],jokes=engine.parodyLines[angle]||engine.parodyLines['Anime / fandom obsession'];
- let hookLines=parody&&hookLang.id==='en'?jokes.slice():parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?engine.multilingualFandom[hookLang.id].slice():[
+ let hookLines=parody&&hookLang.id==='en'?jokes.slice(0,4):parody&&angle==='Anime / fandom obsession'&&engine.multilingualFandom[hookLang.id]?engine.multilingualFandom[hookLang.id].slice():[
   (hookLang.lines||data.languages[0].lines)[0],
   (hookLang.lines||data.languages[0].lines)[1],
   (hookLang.lines||data.languages[0].lines)[2],
@@ -116,6 +116,7 @@ function generate(){
  }
  const arcs=engine.arcs;
  const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
+ if(parody&&hookLang.id==='en')jokes.slice(0,4).forEach((_,index)=>used.add('joke'+index));
  function pickFresh(bank,key){const fresh=bank.map((v,i)=>({v,i})).filter(x=>!used.has(key+x.i));const pool=fresh.length?fresh:bank.map((v,i)=>({v,i}));const x=pool[Math.abs(seed+used.size*13)%pool.length];used.add(key+x.i);return x.v}
  sections.forEach((sec,i)=>{
   const isHook=/chorus|hook/i.test(sec),isBridge=/bridge/i.test(sec),isVerse=/verse/i.test(sec);
@@ -126,7 +127,6 @@ function generate(){
   else if(parody){
    if(lang.id==='en'){
     lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
-    if(isVerse)lines[0]=i===0?'I opened '+topicPhrase+' for a minute or two':'The plot got more complicated than my plans';
    }else if(angle==='Anime / fandom obsession'&&engine.multilingualFandom[lang.id]){
     lines=[pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id),pickFresh(engine.multilingualFandom[lang.id],'localized'+lang.id)];
    }else{
@@ -138,7 +138,7 @@ function generate(){
    if(genre==='Rap'||genre==='Hip-Hop'||genre==='Trap')lines=lines.map(line=>line+' — '+pickFresh(['every setback turns to fuel','I write my truth across the beat','no borrowed crown, I make my lane'],'rap'));
    if(genre==='Metal'||genre==='Rock')lines=lines.map(line=>line.replace(/light|morning|quiet/gi,'fire'));
   }else lines=[pickFresh(bank,'lang'+lang.id),pickFresh(bank,'lang'+lang.id)];
-  if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'verseExtraJoke'+i));else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
+  if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'joke'));else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
   out.push(...lines,'');
  });
  const lyrics=out.join('\n').trim();
