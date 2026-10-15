@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -48,6 +50,46 @@ class LyricEngineTests(unittest.TestCase):
             self.assertIn("ABAB", data["rhymeSchemes"])
             self.assertIn("rhymeDictionary", data)
             self.assertGreaterEqual(len(data["rhymeDictionary"]), 20)
+
+
+    def test_unknown_options_fall_back_and_line_count_is_clamped(self):
+        lyrics = generate_lyrics(
+            "quiet orbit", mood="Not a real mood", rhyme_scheme="unknown",
+            seed=11, verse_lines=1,
+        )
+        verse_one = lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        self.assertEqual(len(verse_one.splitlines()), 2)
+        self.assertIn("quiet orbit", lyrics)
+
+        long_lyrics = generate_lyrics("quiet orbit", seed=11, verse_lines=99)
+        long_verse = long_lyrics.split("[Verse 1]\\n", 1)[1].split("\\n\\n[Chorus]", 1)[0]
+        self.assertEqual(len(long_verse.splitlines()), 8)
+
+    def test_generated_engine_contains_every_browser_data_bank(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "content" / "lyric_engine.json"
+            build_static_data(target)
+            data = json.loads(target.read_text(encoding="utf-8"))
+        for key in (
+            "phrases", "parodyLines", "multilingualFandom", "arcs",
+            "rhymeSchemes", "rhymeDictionary",
+        ):
+            self.assertIsInstance(data.get(key), dict)
+            self.assertTrue(data[key], key)
+
+    def test_build_produces_complete_pages_artifact(self):
+        root = Path(__file__).resolve().parents[1]
+        result = subprocess.run(
+            [sys.executable, str(root / "build.py")],
+            cwd=root, check=True, capture_output=True, text=True,
+        )
+        self.assertIn("local HTML/JS references", result.stdout)
+        for relative in (
+            "index.html", "static/app.js", "static/style.css",
+            "content/catalog.json", "content/lyric_engine.json",
+            "manifest.webmanifest", "sw.js", ".nojekyll",
+        ):
+            self.assertTrue((root / "dist" / relative).is_file(), relative)
 
 
 if __name__ == "__main__":
