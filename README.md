@@ -63,6 +63,11 @@ The offline composer uses original templates and language resources, so it is a 
 
 ## Features
 
+- Engine v7: dictionary-backed rhyme-family detection and stronger AABB/ABAB chorus endings
+- Duplicate repair pass replaces accidental repeated lines while preserving intentional hook repeats
+- Browser generation performs a final cross-section duplicate check using local language-specific banks
+- Lyric Coach rhyme scan now checks curated dictionary families before falling back to suffix heuristics
+- More reliable verse selection and deterministic regression tests for rhyme families and duplicate repair
 - Genre, mood, theme, language, and song structure selection
 - Single-language and mixed-language lyrics
 - Optional original parody/comedy mode, including native Mandarin comedy categories
