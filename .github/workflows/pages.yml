@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Check JavaScript syntax
+        run: node --check static/app.js
       - name: Build static site
         run: python build.py
       - uses: actions/upload-pages-artifact@v3
