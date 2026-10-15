@@ -1,8 +1,16 @@
 # SongForge — Multilingual Lyrics Lab
 
-**Current release: v6.0** — native Simplified Chinese songwriting and comedy banks, Chinese rap phrasing, expanded offline validation, and an updated app cache.
+**Current release: v8.0** — improved deterministic multilingual lyric generation, stronger rhyme-family support, and a structured Mandarin romance-satire song form with rap verses, choir call-and-response, an emotional bridge, and a comic outro.
 
-A static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
+SongForge is a free, static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
+
+## What’s new in v8
+
+- **Structured Mandarin romance satire:** a complete song arc with spoken intro, rhythmic verses, rising pre-chorus, big chorus with choir responses, emotional bridge, final chorus variation, and comic outro.
+- **Topic-aware Chinese lines:** the selected topic is woven into the lyrics rather than leaving the song entirely generic.
+- **Intentional hook repetition:** chorus and call-and-response repeats are preserved while accidental duplicate lines are checked.
+- **Offline-first, deterministic generation:** no AI model or paid generation service is used.
+- **Validation:** Python unit tests, JavaScript syntax checks, and the static-site build run in the GitHub Actions workflow.
 
 ## Installable PWA, responsive UI, and branding
 
@@ -26,7 +34,7 @@ python build.py
 
 The browser studio includes a **Rhyme pattern** selector (Free verse, AABB, and ABAB), a **Lines per verse** setting (2, 4, 6, or 8), and a **Local rhyme finder**. The finder searches the Python-generated offline rhyme dictionary and offers clickable word suggestions without network access. The Python CLI supports the same rhyme patterns and configurable verse lengths.
 
-This is template-based generation, not an AI model. Python is needed only for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
+This is template-based generation, not an AI model. Python is needed for local CLI use and building/testing the static site; deployed browser interactions use the generated JSON and JavaScript.
 
 ## Free and offline-friendly
 
@@ -55,23 +63,26 @@ Requires Python 3.10+; no third-party packages are required.
 python build.py
 ```
 
-The generated site is written to `dist/`. Deploy the contents of `dist/` to a static host. Browsers generally block local JSON fetches from `file://`, so preview through a static host rather than opening the HTML file directly. For GitHub Pages, enable Pages in **Repository Settings → Pages** and set the build/deployment source to **GitHub Actions**. The included workflow then builds and deploys the `dist/` folder on pushes to `main`.
+The generated site is written to `dist/`. Deploy the contents of `dist/` to a static host. Browsers generally block local JSON fetches from `file://`, so preview through a static host rather than opening the HTML file directly. For GitHub Pages, enable Pages in **Repository Settings → Pages** and set the build/deployment source to **GitHub Actions**. The included workflow builds and deploys the `dist/` folder on pushes to `main`.
 
-## Generator expectations
+## Generator expectations and lyric quality
 
-The offline composer uses original templates and language resources, so it is a template-driven writing aid rather than a large language model. It never generates audio, music, vocals, or beats. English output varies with topic, mood, genre, and parody angle. Simplified Chinese (中文) now has mood-specific lyric banks, Chinese rap lines, and culturally grounded parody banks for fandom, daily-life chaos, internet memes, romance satire, and genre exaggeration. The Chinese resources are written as Mandarin lines rather than word-for-word translations. Other languages use curated phrase banks and may need more editing for naturalness; users should review multilingual lyrics before publishing.
+The offline composer uses curated phrase banks and deterministic templates, so it is a template-driven writing aid rather than a large language model. Output quality depends on the language, topic, genre, mood, and parody angle; generated lyrics should be reviewed and edited before publishing.
+
+Simplified Chinese (中文) has dedicated Mandarin phrase banks, rap resources, and localized comedy themes. The **Romance satire** parody form is more structured than a generic template: it combines conversational Mandarin, escalating relationship jokes, rhythmic rap passages, a choir-backed hook, a sincere emotional bridge, and a final comic turn. The selected topic is inserted into relevant lines. This specialized form is a quality benchmark for further improvements; it does not mean every language or parody category currently has the same degree of structure.
+
+Other languages and categories use curated phrase banks and may need more editing for naturalness, rhyme, cultural fit, or idiomatic expression. Always review multilingual lyrics before publishing.
 
 ## Features
 
-- Engine v8: dictionary-backed rhyme-family detection, stronger AABB/ABAB endings, and structured Mandarin parody song forms
-- Section-aware songwriting forms for Mandarin romance satire, with spoken intro, rhythmic verses, rising pre-chorus, choir call-and-response hooks, emotional bridge, final hook variation, and comic outro
-- Duplicate repair pass replaces accidental repeated lines while preserving intentional hook repeats
-- Browser generation performs a final cross-section duplicate check using local language-specific banks
-- Lyric Coach rhyme scan now checks curated dictionary families before falling back to suffix heuristics
-- More reliable verse selection and deterministic regression tests for rhyme families and duplicate repair
-- Genre, mood, theme, language, and song structure selection
+- **Engine v8:** dictionary-backed rhyme-family detection and stronger AABB/ABAB end-rhyme support
+- Structured Mandarin romance-satire song form with spoken intro, rhythmic verses, rising pre-chorus, choir call-and-response, emotional bridge, final chorus variation, and comic outro
+- Topic-aware Chinese lyric template and intentional chorus/hook repetition
+- Duplicate-repair checks designed to avoid removing intentional hook repeats
+- Lyric Coach rhyme scan checks curated dictionary families before falling back to suffix heuristics
+- Genre, mood, theme, language, and song-structure selection
 - Single-language and mixed-language lyrics
-- Optional original parody/comedy mode, including native Mandarin comedy categories
+- Optional original parody/comedy mode, including Mandarin comedy categories
 - Simplified Chinese songwriting with mood-aware phrases, Chinese rap resources, and localized humor
 - Editable lyrics with topic-, mood-, and genre-aware templates
 - Live Lyric Coach checks section structure, line count, repeated lines, rough singability, possible English end-rhyme groups, and estimated syllable spread
