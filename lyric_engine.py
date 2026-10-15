@@ -682,7 +682,6 @@ def _quality_fallbacks(language: str) -> list[str]:
     lines = [line for bank in PHRASES.values() for line in bank]
     lines += [line for bank in ARCS.values() for line in bank]
     lines += [line for bank in PARODY.values() for line in bank]
-    lines += [line for bank in LOCALIZED_RAP.values() for line in bank]
     return lines
 
 
