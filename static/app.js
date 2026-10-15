@@ -236,4 +236,7 @@ function download(text,name,type){const a=document.createElement('a'),url=URL.cr
 async function copy(text){try{await navigator.clipboard.writeText(text);notify('Lyrics copied')}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.append(ta);ta.select();const ok=document.execCommand('copy');ta.remove();notify(ok?'Lyrics copied':'Copy failed — select and copy the lyrics manually')}}
 function restore(e){const f=e.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result),arr=Array.isArray(parsed)?parsed:parsed.songs;if(!Array.isArray(arr))throw Error('shape');const map=new Map(getLib().map(s=>[s.id,s]));arr.forEach((s,i)=>{if(s&&typeof s.title==='string'&&typeof s.lyrics==='string')map.set(s.id||('restored-'+Date.now()+'-'+i),s)});localStorage.setItem(KEY,JSON.stringify(Array.from(map.values())));updateCount();renderLibrary();notify('Backup restored')}catch(e){notify('Invalid SongForge backup file')}e.target.value=''};reader.readAsText(f)}
 init();
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
 })();
