@@ -165,6 +165,36 @@ function generate(){
  if(!parody&&hookLang.id==='en'&&engine.rhymeSchemes&&engine.rhymeSchemes[$('rhymeScheme').value]&&engine.rhymeSchemes[$('rhymeScheme').value].length){
   hookLines=engine.rhymeSchemes[$('rhymeScheme').value].map(line=>line.replace('{topic}',topicPhrase));
  }
+ const zhSongForms=engine.localizedSongForms&&engine.localizedSongForms.zh||{};
+ const zhStructuredForm=parody&&hookLang.id==='zh'&&zhSongForms[angle]&&$('length').value!=='short'?zhSongForms[angle]:null;
+ if(zhStructuredForm){
+  sections.splice(0,sections.length,
+   '[Intro — 说唱口白｜慵懒、戏剧化]',
+   '[Verse 1 — 轻快说唱｜俏皮切分]',
+   '[Pre-Chorus — 旋律渐起]',
+   '[Chorus — 流行大副歌＋福音合唱]',
+   '[Verse 2 — 加速说唱｜密集押韵]',
+   '[Pre-Chorus — 鼓点加重，合唱回应]',
+   '[Hook — 全编制＋合唱团]',
+   '[Bridge — 钢琴＋温柔合唱｜真心话]',
+   '[Final Chorus — 爆发式流行副歌＋全员合唱]',
+   '[Outro — 伴奏骤停｜一本正经]'
+  );
+  hookLines=zhStructuredForm['Chorus'].slice();
+ }
+ function structuredZhLines(section){
+  if(!zhStructuredForm)return null;
+  const key=section.toLocaleLowerCase();
+  if(key.includes('intro'))return zhStructuredForm.Intro;
+  if(key.includes('verse 1'))return zhStructuredForm['Verse 1'];
+  if(key.includes('pre-chorus'))return zhStructuredForm['Pre-Chorus'];
+  if(key.includes('final chorus'))return zhStructuredForm['Final Chorus'];
+  if(key.includes('verse 2'))return zhStructuredForm['Verse 2'];
+  if(key.includes('bridge'))return zhStructuredForm.Bridge;
+  if(key.includes('outro'))return zhStructuredForm.Outro;
+  if(key.includes('chorus')||key.includes('hook'))return zhStructuredForm.Chorus;
+  return null;
+ }
  const arcs=engine.arcs;
  const out=[],used=new Set(),moodLines=engine.phrases[mood]||engine.phrases.Hopeful;
  if(parody&&hookLang.id==='en')jokes.slice(0,4).forEach((_,index)=>used.add('joke'+index));
@@ -177,7 +207,9 @@ function generate(){
   const lang=isHook?hookLang:langs[i%langs.length],bank=lang.lines||data.languages[0].lines;
   out.push(sec+' — '+lang.name);
   let lines;
-  if(isHook)lines=hookLines;
+  const customZhLines=structuredZhLines(sec);
+  if(customZhLines)lines=customZhLines.slice();
+  else if(isHook)lines=hookLines;
   else if(parody){
    if(lang.id==='en'){
     lines=[pickFresh(jokes,'joke'),pickFresh(jokes,'joke')];
@@ -200,7 +232,7 @@ function generate(){
    if(['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh){lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(localizedRap.zh,'localizedRapzh')];}
    else{lines=[pickFresh(topicLines,'zhTopic'+i),pickFresh(zhBank,'localizedPhraseszh'+mood)];}
   }else lines=[pickFresh(bank,'lang'+lang.id),pickFresh(bank,'lang'+lang.id)];
-  if(isVerse&&!isHook){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'joke'));else if(parody&&lang.id==='zh'&&localizedParody.zh&&localizedParody.zh[angle])lines.push(pickFresh(localizedParody.zh[angle],'localizedParodyzh'));else if(lang.id==='zh'&&localizedPhrases.zh){const zhExtra=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful;const zhRap=['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh;lines.push(pickFresh(zhRap?localizedRap.zh:zhExtra,zhRap?'localizedRapzh':'localizedPhraseszh'+mood));}else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
+  if(isVerse&&!isHook&&!customZhLines){const target=Math.max(2,Math.min(8,Number($('verseLines').value)||4));while(lines.length<target){if(lang.id==='en'&&!parody)lines.push(pickFresh(moodLines,'verseExtraMood'+i));else if(parody&&lang.id==='en')lines.push(pickFresh(jokes,'joke'));else if(parody&&lang.id==='zh'&&localizedParody.zh&&localizedParody.zh[angle])lines.push(pickFresh(localizedParody.zh[angle],'localizedParodyzh'));else if(lang.id==='zh'&&localizedPhrases.zh){const zhExtra=localizedPhrases.zh[mood]||localizedPhrases.zh.Hopeful;const zhRap=['Rap','Hip-Hop','Trap','说唱','嘻哈'].includes(genre)&&localizedRap.zh;lines.push(pickFresh(zhRap?localizedRap.zh:zhExtra,zhRap?'localizedRapzh':'localizedPhraseszh'+mood));}else lines.push(pickFresh(bank,'verseExtraLang'+lang.id));}lines=lines.slice(0,target)}
   out.push(...lines,'');
  });
  const lyrics=dedupeGeneratedLyrics(out.join('\n').trim(),engine,hookLang.id,seed);
