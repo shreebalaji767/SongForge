@@ -99,7 +99,7 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
-            self.assertGreaterEqual(data["version"], 9)
+            self.assertGreaterEqual(data["version"], 10)
             for angle, lines in data["parodyLines"].items():
                 self.assertGreaterEqual(len(lines), 32, angle)
                 self.assertEqual(len(lines), len(set(lines)), angle)
@@ -117,6 +117,20 @@ class LyricEngineTests(unittest.TestCase):
 
 
 
+
+
+    def test_mandarin_verses_use_curated_full_length_cadence_banks(self):
+        from lyric_engine import ZH_RHYME_VERSES
+        self.assertEqual(set(ZH_RHYME_VERSES), {
+            "Romance satire", "Anime / fandom obsession", "Everyday-life chaos",
+            "Internet meme energy", "Genre exaggeration",
+        })
+        for angle, sections in ZH_RHYME_VERSES.items():
+            self.assertEqual(len(sections["Verse 1"]), 8, angle)
+            self.assertEqual(len(sections["Verse 2"]), 8, angle)
+            for verse in sections.values():
+                self.assertTrue(all(line.strip() for line in verse))
+                self.assertEqual(len(verse), len(set(verse)), angle)
 
     def test_all_mandarin_parody_categories_have_full_song_forms(self):
         expected = {
