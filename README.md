@@ -1,13 +1,13 @@
 # SongForge — Multilingual Lyrics Lab
 
-**Current release: v9.0** — complete structured Mandarin parody song forms across all five comedy categories, with category-specific hooks, choir call-and-response, bridges, and comedic outros.
+**Current release: v10.0** — structured Mandarin parody forms plus curated eight-line rap verses with deliberate end-sound families, varied cadence, and more topic-specific punchlines.
 
 SongForge is a free, static, browser-based **lyrics-only** generator for original lyrics in one or multiple languages, with genre and mood controls and optional parody mode. It does not generate music, audio, vocals, or beats.
 
-## What’s new in v9
+## What’s new in v10
 
-- **Full Mandarin parody forms across five categories:** romance satire, anime/fandom obsession, everyday-life chaos, internet meme energy, and genre exaggeration each receive a complete song arc.
-- **Category-specific hooks and bridges:** each comedy category has its own chorus, choir responses, emotional or reflective bridge, final-chorus variation, and punchline outro.
+- **Mandarin flow upgrade:** curated eight-line verses for all five parody categories use planned end-sound groupings, varied line lengths, and clearer punchline setups.
+- **Full song arcs remain:** each category keeps its own hook, choir responses, bridge, final-chorus variation, and punchline outro.
 - **Topic-aware intros:** the selected topic is incorporated into each structured Mandarin form; intentional hook repetition is preserved while accidental repeats are checked.
 - **Offline-first, deterministic generation:** no AI model or paid generation service is used.
 - **Validation:** Python unit tests, JavaScript syntax checks, and the static-site build run in the GitHub Actions workflow.
@@ -75,8 +75,8 @@ Other languages and categories use curated phrase banks and may need more editin
 
 ## Features
 
-- **Engine v9:** dictionary-backed rhyme-family detection and stronger AABB/ABAB end-rhyme support
-- Five structured Mandarin parody song forms with spoken intros, rhythmic verses, rising pre-choruses, choir call-and-response, bridges, final-chorus variations, and comic outros
+- **Engine v10:** dictionary-backed rhyme-family detection and stronger AABB/ABAB end-rhyme support
+- Five structured Mandarin parody song forms with curated cadence-aware rap verses, spoken intros, rising pre-choruses, choir call-and-response, bridges, final-chorus variations, and comic outros
 - Topic-aware Chinese lyric template and intentional chorus/hook repetition
 - Duplicate-repair checks designed to avoid removing intentional hook repeats
 - Lyric Coach rhyme scan checks curated dictionary families before falling back to suffix heuristics
