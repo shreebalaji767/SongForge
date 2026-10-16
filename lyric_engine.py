@@ -696,7 +696,58 @@ ZH_PARODY_FORMS = {
  }
 }
 
-ENGINE = {"version":8,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY,"localizedSongForms":{"zh":ZH_PARODY_FORMS}}
+
+# Expand the full-song structure to every native Mandarin parody category.
+# The existing curated banks supply distinct verses; bespoke hooks and bridges
+# give each category its own payoff instead of reusing the romance song.
+_ZH_FORM_EXTRAS = {
+ "Anime / fandom obsession": {
+  "Intro": ["今晚只说看一集，{topic}马上开播", "片头刚刚响起，我的睡意立刻退票", "（郑重声明）这不是熬夜，是追更需要仪式感。"],
+  "Pre-Chorus": ["更新提示一响，理智开始掉线", "闹钟站在门口，像个等我的教练", "（合唱：再看一集！）明天再跟现实见面！"],
+  "Chorus": ["再看一集！我马上就睡！", "（合唱：你上次也是这样说！）", "剧情还没完结，天已经开始亮！", "（合唱：早八 Boss 登场！）", "我的眼睛说休息——", "我的手说下一集！", "主角还在升级——", "我的黑眼圈先满级！"],
+  "Bridge": ["故事教我勇敢，也陪我走过低潮", "虚构的世界很远，却把孤单照亮", "只是片尾响起时，也该回到生活身旁", "把热爱留在心里，明天继续发光"],
+  "Final Chorus": ["再看一集！我真的会睡！", "（合唱：先把闹钟放远一点！）", "剧情还没完结，天已经开始亮！", "（合唱：早八 Boss 又登场！）", "我的眼睛说休息——", "我的手说最后一集！", "片尾曲终于响起——", "我把手机放下，五秒后又捡起！"],
+  "Outro": ["（片尾曲停）我发誓，这真的是最后一集。", "手机显示：已连续播放七小时。", "（小声）那……下一季什么时候更新？"]
+ },
+ "Everyday-life chaos": {
+  "Intro": ["今日计划写得满满，{topic}负责背锅", "待办清单刚打开，我先给自己倒杯水", "（严肃播报）本日目标：先开始，再解释。"],
+  "Pre-Chorus": ["闹钟响了三遍，灵魂还在加载", "我说马上动手，沙发提出反对", "（合唱：现在就做！）我说先把清单排好！"],
+  "Chorus": ["待办一大堆，我先深呼吸！", "（合唱：然后呢？然后呢？）", "洗衣服没晾，锅还排着队！", "（合唱：明天再说绝对不对！）", "我的计划说冲刺——", "我的拖延说暂停！", "我只想做一件事——", "先把这首歌唱完再努力！"],
+  "Bridge": ["不是每一天，都要赢得漂亮", "偶尔乱成一团，也不代表没希望", "把小小的进步，留给明天欣赏", "先笑一笑，再把第一步走上"],
+  "Final Chorus": ["待办一大堆，我先做一件！", "（合唱：终于开始了！）", "洗衣服先晾，锅也排好队！", "（合唱：进步值得鼓掌一回！）", "我的计划说冲刺——", "我的拖延说等会儿——", "我终于完成第一件——", "把完成清单写进待办里面！"],
+  "Outro": ["今日总结：计划写得非常完整。", "执行情况：正在总结今日计划。", "（停顿）明天的我，请提前做好准备。"]
+ },
+ "Internet meme energy": {
+  "Intro": ["群聊通知一响，{topic}立刻冲上热搜", "我本来只潜水，手指却开始打字", "（系统提示）你的注意力已离线。"],
+  "Pre-Chorus": ["已读两个字，脑补一整季", "输入框闪三下，我删掉了勇气", "（合唱：发出去！）我最后只发了个表情！"],
+  "Chorus": ["在线很勇，线下静音！", "（合唱：本人正在缓冲！）", "我说只刷五分钟，天亮来敲门！", "（合唱：屏幕时间请解释！）", "我的脑说下线——", "我的手说再看一眼！", "通知红点在召唤——", "我把专注模式也一起屏蔽！"],
+  "Bridge": ["屏幕里的笑声，确实陪过很多夜", "可真正的拥抱，不需要发送链接", "我把手机放下，听朋友说完今天", "原来最好的热梗，是一起笑的瞬间"],
+  "Final Chorus": ["在线很勇，线下也开麦！", "（合唱：先从一句你好开始！）", "我说只刷五分钟，真的把屏幕关！", "（合唱：这次没有但是！）", "我的脑说下线——", "我的手说再看一眼——", "朋友叫我出门——", "我回：来了！这次真的出现！"],
+  "Outro": ["我决定戒网，先发一条声明。", "点赞三百，评论四百。", "（停顿）声明的链接还没关。"]
+ },
+ "Genre exaggeration": {
+  "Intro": ["一件小事发生，{topic}立刻配上史诗鼓点", "镜头慢慢推进，连空气都开始紧张", "（旁白）没人知道，这一刻预算已经超标。"],
+  "Pre-Chorus": ["咖啡洒了一滴，命运开始转场", "打印机卡了纸，反派音乐登场", "（合唱：天啊！）这剧情谁敢想象！"],
+  "Chorus": ["小事也要唱成史诗！", "（合唱：镜头拉远！）", "掉了一支笔，天地都失色！", "（合唱：弦乐请再悲壮一点！）", "鼓点已经就位——", "合唱团正在集结！", "我只是打个喷嚏——", "字幕写着：命运的转折！"],
+  "Bridge": ["笑过那些夸张，才发现平凡珍贵", "没有配乐的日子，也值得认真体会", "不用每个瞬间，都拍成英雄归位", "小小的生活，也有自己的光辉"],
+  "Final Chorus": ["小事也要唱成史诗！", "（合唱：预算再次超支！）", "掉了一支笔，天地都失色！", "（合唱：慢动作再来一次！）", "鼓点已经就位——", "合唱团正在集结——", "我只是喝口水——", "片尾字幕：本片改编自真实生活！"],
+  "Outro": ["（音乐骤停）我刚刚只是打了个喷嚏。", "导演说再来一条，要更有情绪。", "（叹气）我的日常，制作费太高。"]
+ }
+}
+for _angle, _extras in _ZH_FORM_EXTRAS.items():
+    _bank = LOCALIZED_PARODY["zh"][_angle]
+    ZH_PARODY_FORMS[_angle] = {
+        "Intro": _extras["Intro"],
+        "Verse 1": _bank[:8],
+        "Pre-Chorus": _extras["Pre-Chorus"],
+        "Chorus": _extras["Chorus"],
+        "Verse 2": _bank[8:16],
+        "Bridge": _extras["Bridge"],
+        "Final Chorus": _extras["Final Chorus"],
+        "Outro": _extras["Outro"],
+    }
+
+ENGINE = {"version":9,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY,"localizedSongForms":{"zh":ZH_PARODY_FORMS}}
 
 
 
