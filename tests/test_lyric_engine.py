@@ -99,7 +99,7 @@ class LyricEngineTests(unittest.TestCase):
             data = json.loads(target.read_text(encoding="utf-8"))
             self.assertIn("phrases", data)
             self.assertIn("parodyLines", data)
-            self.assertGreaterEqual(data["version"], 8)
+            self.assertGreaterEqual(data["version"], 9)
             for angle, lines in data["parodyLines"].items():
                 self.assertGreaterEqual(len(lines), 32, angle)
                 self.assertEqual(len(lines), len(set(lines)), angle)
@@ -116,6 +116,24 @@ class LyricEngineTests(unittest.TestCase):
             self.assertGreaterEqual(len(data["rhymeDictionary"]), 20)
 
 
+
+
+    def test_all_mandarin_parody_categories_have_full_song_forms(self):
+        expected = {
+            "Romance satire", "Anime / fandom obsession", "Everyday-life chaos",
+            "Internet meme energy", "Genre exaggeration",
+        }
+        data = json.loads(json.dumps(__import__("lyric_engine").ENGINE))
+        forms = data["localizedSongForms"]["zh"]
+        self.assertTrue(expected.issubset(forms))
+        for angle in expected:
+            form = forms[angle]
+            for section in ("Intro", "Verse 1", "Pre-Chorus", "Chorus", "Verse 2", "Bridge", "Final Chorus", "Outro"):
+                self.assertTrue(form.get(section), f"{angle}: missing {section}")
+            lyrics = generate_lyrics("深夜日常", language="zh", parody=True, parody_angle=angle, seed=12)
+            self.assertIn("[Final Chorus", lyrics)
+            self.assertIn("[Bridge", lyrics)
+            self.assertIn("深夜日常", lyrics)
 
     def test_chinese_generation_uses_native_mandarin_banks(self):
         lyrics = generate_lyrics(
