@@ -747,7 +747,126 @@ for _angle, _extras in _ZH_FORM_EXTRAS.items():
         "Outro": _extras["Outro"],
     }
 
-ENGINE = {"version":9,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY,"localizedSongForms":{"zh":ZH_PARODY_FORMS}}
+
+# Curated Mandarin rap couplets use deliberate end-sound families and varied
+# line lengths. This is a lightweight prosody aid, not a claim of perfect rhyme.
+ZH_RHYME_VERSES = {
+ "Romance satire": {
+  "Verse 1": [
+   "你说今晚随便吃，我把菜单翻到发慌",
+   "你说都行别紧张，结果每家都要想",
+   "我把约会排成表，连散步都分时长",
+   "你问我爱不爱你，我先确认语气正常",
+   "情话练到第十遍，开口却问你冷不冷",
+   "你说不用太费心，我又开始讲道理",
+   "你把最后一口留我，我突然相信命运",
+   "直到你问谁洗碗，浪漫立刻变成谜"
+  ],
+  "Verse 2": [
+   "你说纪念日别忘，我设了五个提醒方案",
+   "日历写着惊喜计划，购物车却预算超难",
+   "我把花藏在门后，猫先替我拆穿",
+   "你笑我太会安排，我说这叫认真经营关系",
+   "你把奶茶递给我，我立刻心情变好",
+   "刚想说句漂亮话，你提醒吸管别咬",
+   "爱不是每道题，都要算到分毫不少",
+   "有你把日子过乱，反而刚刚好"
+  ]
+ },
+ "Anime / fandom obsession": {
+  "Verse 1": [
+   "片头曲刚响起来，我的困意立刻投降",
+   "说好只看一集，片尾彩蛋又把我拦下场",
+   "主角刚说要出发，我的外卖也到场",
+   "闹钟在旁边狂响，我把它按成背景音效一场",
+   "弹幕比剧情还急，剧透让我提前生气",
+   "收藏夹越堆越满，待看的坑还在那里",
+   "角色终于要告白，我的网速偏偏卡机",
+   "更新停在最关键处，我对着黑屏演悲剧",
+  ],
+  "Verse 2": [
+   "周边清单列三页，钱包开始认真谈判",
+   "本来只买一张海报，最后抱回整套周边",
+   "朋友约我去吃饭，我说更新以后再见",
+   "现实说请你长大，我说这集还没看完",
+   "片尾曲终于响起，我发誓现在就睡觉",
+   "下一季预告一出现，枕头立刻被我抛掉",
+   "我把手机放到远处，手却自己摸回来找",
+   "追番让我热血沸腾，黑眼圈负责收尾报告"
+  ]
+ },
+ "Everyday-life chaos": {
+  "Verse 1": [
+   "待办清单写得满，执行进度还在流浪",
+   "我说马上就开始，沙发把我留在身旁",
+   "洗衣机已经停转，衣服还在里面乘凉",
+   "我把今天排得太满，连发呆都得预约时长",
+   "手机明明就在手里，我却四处找东西",
+   "收纳盒买了三只，杂物还是住原地",
+   "我说只休息五分，醒来已错过晨曦",
+   "计划表写得像冠军，现实只完成标题",
+  ],
+  "Verse 2": [
+   "我把预算记得清，外卖却总能找到漏洞",
+   "本来只买一瓶水，购物车像搬家行动",
+   "我说下周会自律，日历听完保持沉默",
+   "拖延给我发邀请，我还认真回了收到",
+   "今天终于做完一件，成就感刚刚好",
+   "清单划掉一行字，像赢了世界一秒",
+   "明天不求全都完成，先把第一步走到",
+   "我终于开始行动——先把这首歌唱好"
+  ]
+ },
+ "Internet meme energy": {
+  "Verse 1": [
+   "群聊弹出新消息，我的手指立刻登场",
+   "我说只回一个表情，最后聊成连续剧一场",
+   "输入框打了三百字，发送前又全删光",
+   "我发了句没事，内心字幕却写满慌张",
+   "已读两个字，我能脑补出十集戏",
+   "打字又删掉，最后只发一只猫咪",
+   "我把专注模式打开，通知还是找到我这里",
+   "线上话多像主持，线下见面只会点头示意",
+  ],
+  "Verse 2": [
+   "我说今天少刷一点，屏幕时间拒绝隐瞒",
+   "视频一个接一个，五分钟变成整晚",
+   "我把手机放得很远，手却自动走回原点",
+   "本来要查一个问题，最后研究了半天推荐",
+   "我终于关掉屏幕，房间安静得刚刚好",
+   "朋友叫我出门走走，我说这次真的到",
+   "把笑声留给眼前人，比点赞更有效",
+   "原来最好的热梗，是我们一起笑"
+  ]
+ },
+ "Genre exaggeration": {
+  "Verse 1": [
+   "咖啡滴在白衬衫，弦乐立刻开始悲壮",
+   "打印机卡住一页，像终极反派登场",
+   "电梯停了三秒钟，我脑内字幕写满沧桑",
+   "我只是打个喷嚏，镜头却慢动作回放一场",
+   "一支笔找不到，我就怀疑命运的谜",
+   "老板发来一个问号，我听见悬疑配乐起",
+   "手机掉到百分五，世界像要暂停呼吸",
+   "我把小事演成大片，还给自己颁奖典礼",
+  ],
+  "Verse 2": [
+   "外卖晚了十分钟，我的内心开了公审专案",
+   "雨伞忘在家门口，剧情立刻转进灾难",
+   "袜子只剩一只，我宣布进入调查阶段",
+   "今天只是迟到两分，我却演完三季遗憾",
+   "后来我笑着喝水，发现平凡也挺好",
+   "没有配乐的日子，也能把生活过好",
+   "不必每件小事，都要惊天动地才算到",
+   "日常若有片尾字幕，就写：明天继续搞笑"
+  ]
+ }
+}
+for _angle, _verses in ZH_RHYME_VERSES.items():
+    ZH_PARODY_FORMS[_angle]["Verse 1"] = _verses["Verse 1"]
+    ZH_PARODY_FORMS[_angle]["Verse 2"] = _verses["Verse 2"]
+
+ENGINE = {"version":10,"phrases":PHRASES,"parodyLines":PARODY,"multilingualFandom":FANDOM,"localizedPhrases":LOCALIZED_PHRASES,"localizedParody":LOCALIZED_PARODY,"localizedRap":LOCALIZED_RAP,"arcs":ARCS,"rhymeSchemes":RHYME_SCHEMES,"rhymeDictionary":RHYME_DICTIONARY,"localizedSongForms":{"zh":ZH_PARODY_FORMS}}
 
 
 
