@@ -76,8 +76,8 @@ for key in ("phrases", "parodyLines", "multilingualFandom", "arcs", "rhymeScheme
     if not isinstance(engine.get(key), dict) or not engine[key]:
         raise SystemExit(f"Generated lyric engine is missing valid data: {key}")
 
-if engine.get("version", 0) < 9:
-    raise SystemExit("Generated lyric engine is outdated; expected version 9 or newer.")
+if engine.get("version", 0) < 10:
+    raise SystemExit("Generated lyric engine is outdated; expected version 10 or newer.")
 if not engine.get("localizedPhrases", {}).get("zh") or not engine.get("localizedParody", {}).get("zh") or not engine.get("localizedRap", {}).get("zh"):
     raise SystemExit("Generated lyric engine is missing native Mandarin songwriting banks.")
 required_zh_forms = {"Romance satire", "Anime / fandom obsession", "Everyday-life chaos", "Internet meme energy", "Genre exaggeration"}
